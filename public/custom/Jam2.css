@@ -1,0 +1,11 @@
+*, #clock {
+    margin: 20px auto;
+    padding: 0;
+    /* background: #333; */
+    width: 100%;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    font-size: 34px;
+    font-family: calibri;
+  }
