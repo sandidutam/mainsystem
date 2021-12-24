@@ -9,20 +9,20 @@
             <th>Sektor</th>
             <th>Jam Masuk</th>
             <th>Jam Keluar</th>
-            <th>Catatan</th>
-            <th>Keterangan</th>
+            {{-- <th>Catatan</th> --}}
+            <th>Ket</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($presensi as $p)
         <tr>
-            <td>{{$p->tanggal}}</td>
-            <td>{{$p->nomor_pegawai}}</td>
-            <td>{{$p->nama_lengkap}}</td>
-            <td>{{$p->sektor_area}}</td>
+            <td>{{date('d F Y', strtotime($p->tanggal))}}</td>
+            <td>{{$p->pegawai->nomor_pegawai}}</td>
+            <td>{{$p->pegawai->nama_lengkap()}}</td>
+            <td>{{$p->pegawai->sektor_area}}</td>
             <td>{{$p->jam_masuk}}</td>
             <td>{{$p->jam_keluar}}</td>
-            <td>{{$p->catatan()}}</td>
+            {{-- <td>{{$p->catatan()}}</td> --}}
             <td>{{$p->keterangan}}</td>
         </tr>
         @endforeach

@@ -29,16 +29,6 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('dashboard');
-        }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
-
 
         $userlog = User::where('email', $request->email)->first();
         // $role = User::where('email', $request->email)->get('role');  -- GET THE FIELD ARRAY
@@ -61,16 +51,28 @@ class AuthController extends Controller
 
         // $token =  $userlog->createToken($request->email)->plainTextToken;
 
-        $loginDetails = $request->only('email','password');
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        if(Auth::attempt($loginDetails))
-            {
-                return redirect('/pegawai');
-            } else {
+            return redirect()->intended('dashboard');
+        }
+
+        return back()->withErrors([
+            'error' => 'The provided credentials do not match our records.',
+        ]);
 
 
-                return redirect('/login')->with('message','Email atau Password salah!');
-            }
+
+        // $loginDetails = $request->only('email','password');
+
+        // if(Auth::attempt($loginDetails))
+        //     {
+        //         return redirect()->intended('/pegawai');
+        //     } else {
+
+
+        //         return redirect('/login')->with('message','Email atau Password salah!');
+        //     }
 
     }
 
@@ -86,7 +88,7 @@ class AuthController extends Controller
 
         // return $id;
         Auth::logout();
-        return redirect('/login');
+        return redirect()->intended('/');
     }
 
 }

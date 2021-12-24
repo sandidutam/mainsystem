@@ -35,14 +35,14 @@ class PresensiController extends Controller
         $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         // $data_pegawai = Pegawai::all();
 
-        $data_lain = Pegawai::whereHas('presensi', function ($query) {
+        $data_lain = Pegawai::orderBy('nama_depan','ASC')->orderBy('nama_belakang','ASC')->whereHas('presensi', function ($query) {
                                 $hari_ini = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
                                 $kemarin = Carbon::yesterday()->timezone('Asia/Jakarta')->format('Y-m-d');
                                 $query->where('tanggal', '=', $hari_ini)
                                 ->orderBy('id','DESC');
                                 })->with('presensi')->get();
 
-        $data_pegawai = Pegawai::select("*")
+        $data_pegawai = Pegawai::select("*")->orderBy('nama_depan','ASC')->orderBy('nama_belakang','ASC')
                             ->whereDoesntHave('presensi', function ($query) {
                             $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
                             $query->where('tanggal', $today);
@@ -80,14 +80,14 @@ class PresensiController extends Controller
 
     public function history()
     {
-        $data_presensi = Presensi::orderBy('id','DESC')->get();
+        $data_presensi = Presensi::orderBy('updated_at','DESC')->get();
 
         $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         $kemarin = Carbon::yesterday()->timezone('Asia/Jakarta')->format('Y-m-d');
         $hari_ini = Carbon::now()->timezone('Asia/Jakarta')->format('d F Y');
         $jml_pegawai= Pegawai::all()->count();
 
-        $today_presensi = Presensi::where('tanggal', '=', $today)->orderBy('id','DESC')->get();
+        $today_presensi = Presensi::where('tanggal', '=', $today)->orderBy('updated_at','DESC')->get();
 
 
 
@@ -189,11 +189,11 @@ class PresensiController extends Controller
 
     public function activity()
     {
-        $data_presensi = Presensi::orderBy('created_at','DESC')->get()->groupBy(function($item) {
+        $data_presensi = Presensi::orderBy('updated_at','DESC')->get()->groupBy(function($item) {
             return $item->created_at->format('d F Y');
         });
 
-
+        $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         $hari_ini = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         $kemarin = Carbon::yesterday()->timezone('Asia/Jakarta')->format('Y-m-d');
         $besok = Carbon::tomorrow()->timezone('Asia/Jakarta')->format('Y-m-d');
@@ -201,24 +201,23 @@ class PresensiController extends Controller
         $tanggal = Presensi::select('tanggal')->get();
         // return $tanggal;
 
-        $data_hari_ini = Presensi::orderBy('created_at','DESC')->whereHas('pegawai', function ($query) {
+        $data_hari_ini = Presensi::orderBy('updated_at','DESC')->whereHas('pegawai', function ($query) {
                         $hari_ini = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
                         $query->where('tanggal', '=', $hari_ini);
                         })->with('pegawai')->get();
 
 
-        $data_kemarin = Presensi::orderBy('id','DESC')->whereHas('pegawai', function ($query) {
+        $data_kemarin = Presensi::orderBy('updated_at','DESC')->whereHas('pegawai', function ($query) {
                         $hari_ini = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
                         $kemarin = Carbon::yesterday()->timezone('Asia/Jakarta')->format('Y-m-d');
                         $query->where('tanggal', '=', $kemarin);
                         })->with('pegawai')->get();
 
-        $data_lain = Presensi::whereHas('pegawai', function ($query) {
+        $data_lain = Presensi::orderBy('updated_at','DESC')->whereHas('pegawai', function ($query) {
                             $hari_ini = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
                             $kemarin = Carbon::yesterday()->timezone('Asia/Jakarta')->format('Y-m-d');
                             $query->where('tanggal', '!=', $kemarin)
-                            ->where('tanggal', '!=', $hari_ini)
-                            ->orderBy('id','DESC');
+                            ->where('tanggal', '!=', $hari_ini);
                             })->with('pegawai')->get();
 
 
@@ -285,6 +284,11 @@ class PresensiController extends Controller
                 $presensi->jam_masuk = $current_time;
                 $presensi->catatan_masuk = $note;
 
+                $id_peg = $request->id;
+                $find_pegawai = Pegawai::find($id_peg);
+                $find_pegawai->status = "Sudah Hadir";
+                $find_pegawai->update();
+
                 // dd($presensi);
 
                 $simpan = $presensi->save();
@@ -311,6 +315,11 @@ class PresensiController extends Controller
             $presensi->jam_keluar = "-";
             $presensi->keterangan = $request->keterangan;
 
+            $id_peg = $request->id;
+            $find_pegawai = Pegawai::find($id_peg);
+            $find_pegawai->status ="Tidak Hadir";
+            $find_pegawai->update();
+
             // dd($presensi);
 
             $simpan = $presensi->save();
@@ -331,11 +340,6 @@ class PresensiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -418,6 +422,12 @@ class PresensiController extends Controller
 
                 $presensi->jam_keluar = $current_time;
                 $presensi->catatan_keluar = $note;
+
+                $id_peg = $request->id;
+                $find_pegawai = Pegawai::find($id_peg);
+                $find_pegawai->status ="Sudah Pulang";
+                $find_pegawai->update();
+
                 $simpan = $presensi->update();
 
                 if( $simpan )
@@ -444,8 +454,8 @@ class PresensiController extends Controller
 
     public function exportExcel()
     {
-        // return Excel::download(new PresensiExport, 'Presensi.xlsx');
-        return Excel::download(new PresensiMultiSheetExport(2021), 'Presensi.xlsx');
+        return Excel::download(new PresensiExport, 'Presensi.xlsx');
+        // return Excel::download(new PresensiMultiSheetExport(2021), 'Presensi.xlsx');
     }
 
     public function exportPdf()

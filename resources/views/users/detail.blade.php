@@ -43,11 +43,11 @@
     <div class="section-body">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <a href="{{ route('user.index') }}" class="btn btn-primary ">
+            <a href="{{ route('user.index') }}" class="btn btn-danger ">
                 <span class="icon">
                     <i class="fas fa-chevron-left mr-2"></i>
                 </span>
-                <span class="text">Index User</span>
+                <span class="text">Kembali</span>
             </a>
         </div>
 

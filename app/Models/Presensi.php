@@ -45,6 +45,7 @@ class Presensi extends Model
         return $this->catatan_masuk.' '.$this->catatan_keluar;
     }
 
+
     /**
      * Get the user that owns the Presensi
      *

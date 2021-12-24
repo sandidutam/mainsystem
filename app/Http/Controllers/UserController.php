@@ -59,7 +59,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required|email:dns',
             'password' =>  ['required', 'confirmed', Password::min(8)],
             'nama_depan' => 'required|min:2|max:25',
             'nama_belakang' => 'required|min:2|max:25',
@@ -143,8 +143,8 @@ class UserController extends Controller
         $userlog = User::where('email', $request->email)->first();
         if (! $userlog || ! Hash::check($request->password_lama, $userlog->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-                // 'password' => ['The provided credentials are incorrect.'],
+                'error' => ['The provided credentials are incorrect.'],
+
             ]);
         }
 

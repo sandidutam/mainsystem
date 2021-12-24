@@ -87,10 +87,6 @@ active
                                     <th>NAMA LENGKAP</th>
                                     <th>JABATAN</th>
                                     <th>SEKTOR</th>
-                                    {{-- <th>TANGGAL</th>
-                                    <th>JAM MASUK</th>
-                                    <th>JAM KELUAR</th>
-                                    <th>CATATAN</th> --}}
                                     <th>AKSI</th>
                                 </tr>
                             </thead>
@@ -101,12 +97,8 @@ active
                                     <td><?= $i; ?></td>
                                     <td>{{$item->nomor_pegawai}}</td>
                                     <td>{{$item->pegawai->nama_lengkap()}}</td>
-                                    <td>{{$item->jabatan}}</td>
-                                    <td>{{$item->sektor_area}}</td>
-                                    {{-- <td>{{date('d F Y', strtotime($item->tanggal))}}</td>
-                                    <td>{{$item->jam_masuk}}</td>
-                                    <td>{{$item->jam_keluar}}</td>
-                                    <td>{{$item->catatan_masuk}} {{$item->catatan_keluar}}</td> --}}
+                                    <td>{{$item->pegawai->jabatan}}</td>
+                                    <td>{{$item->pegawai->sektor_area}}</td>
                                     <td>
                                         <div class="row">
                                             <div class="col">
@@ -117,9 +109,9 @@ active
                                 </tr>
                                 <?php $i++; ?>
                                 @empty
-                                <tr>
+                                {{-- <tr>
                                     <td colspan="11" class="text-center text-white bg-secondary"><i><b>TIDAK ADA DATA UNTUK DITAMPILKAN</b></i></td>
-                                </tr>
+                                </tr> --}}
                                 @endforelse
                             </tbody>
                         </table>

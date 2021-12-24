@@ -110,9 +110,9 @@ active
                                 </tr>
                                 <?php $i++; ?>
                                 @empty
-                                <tr>
+                                {{-- <tr>
                                     <td colspan="11" class="text-center text-white bg-secondary"><i><b>TIDAK ADA DATA UNTUK DITAMPILKAN</b></i></td>
-                                </tr>
+                                </tr> --}}
                                 @endforelse
                             </tbody>
                         </table>

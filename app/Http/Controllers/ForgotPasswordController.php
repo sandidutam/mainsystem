@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
+// use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\Models\User;
 
@@ -37,7 +39,17 @@ class ForgotPasswordController extends Controller
             $message->subject('Reset Password Notification');
         });
 
+        // $status = Password::sendResetLink(
+        //     $request->only('email')
+        // );
+
         return back()->with('message', 'We have e-mailed your password reset link!');
+
+        // return $status === Password::RESET_LINK_SENT
+        // ? back()->with(['status' => __($status)])
+        // : back()->withErrors(['email' => __($status)]);
+
+
     }
 
     public function getPassword($token) {
@@ -49,7 +61,7 @@ class ForgotPasswordController extends Controller
     {
 
         $request->validate([
-            'email' => 'required|email|exists:users',
+            'email' => 'required|email:dns|exists:users',
             'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required',
 
@@ -62,16 +74,27 @@ class ForgotPasswordController extends Controller
         if(!$updatePassword)
         return back()->withInput()->with('error', 'Invalid token!');
 
-        $user = User::where('email', $request->email)
+        if($request->has('password')) {
+            $email = $request->email;
+            $password = $request->password;
+            $verify = $request->password_confirmation;
+
+            if($password == $verify) {
+                $user = User::where('email', $request->email)
                         ->update(['password' => Hash::make($request->password)]);
 
-        // return $user;
+                DB::table('password_resets')->where(['email'=> $request->email])->delete();
 
-        DB::table('password_resets')->where(['email'=> $request->email])->delete();
+                return redirect('/login')->with('message', 'Your password has been changed!');
+            }
 
-        return redirect('/login')->with('message', 'Your password has been changed!');
+
+            return back()->with("message", "The credentials doesn't match!");
+
+
+
+        }
 
     }
-
 
 }

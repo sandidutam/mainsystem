@@ -40,6 +40,21 @@ $("#table-2").dataTable({
 });
 $("#table-3").dataTable({
   "columnDefs": [
+    { "sortable": true, "targets": [2,3] }
+  ]
+});
+$("#table-4").dataTable({
+  "columnDefs": [
+    { "sortable": true, "targets": [2,3] }
+  ]
+});
+$("#table-5").dataTable({
+  "columnDefs": [
+    { "sortable": true, "targets": [2,3] }
+  ]
+});
+$("#table-6").dataTable({
+  "columnDefs": [
     { "sortable": false, "targets": [0,2,3] }
   ]
 });

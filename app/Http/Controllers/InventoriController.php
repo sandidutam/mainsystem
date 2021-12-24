@@ -7,6 +7,7 @@ use App\Models\Inventori;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Crypt;
 
 class InventoriController extends Controller
 {
@@ -36,13 +37,15 @@ class InventoriController extends Controller
         $current_time = Carbon::now()->timezone('Asia/Jakarta')->format('H:i:s');
         // return $current_time;
 
-        $stok_barang = Inventori::find($id);
+        $id_barang = Crypt::decryptString($id);
 
-      
+        $stok_barang = Inventori::find($id_barang);
+
+
         // $data_pegawai = Pegawai::where('id',$id)->get();
         return view('inventori.detail', compact('stok_barang','today'));
     }
-    
+
     public function create()
     {
         return view('inventori.create');
@@ -65,9 +68,9 @@ class InventoriController extends Controller
             return redirect()->route('inventori.create')
                                 ->withErrors($validator)
                                 ->withInput();
-                                
+
         }
-        
+
         $data = new Inventori();
         $data->nama = $request->nama;
         $data->merk = $request->merk;
@@ -95,7 +98,7 @@ class InventoriController extends Controller
 
         }
 
-        if($simpan) 
+        if($simpan)
         {
             return redirect()->route('inventori.index')->with('notifikasi_sukses', 'Stok '.$data->nama.' sudah diinput!');
             // return redirect()->route('pegawai.index');
@@ -104,7 +107,10 @@ class InventoriController extends Controller
 
     public function edit($id)
     {
-        $stok_barang = Inventori::find($id);
+        $id_barang = Crypt::decryptString($id);
+
+        $stok_barang = Inventori::find($id_barang);
+
         return view ('inventori.edit',compact('stok_barang'));
     }
 
@@ -113,14 +119,14 @@ class InventoriController extends Controller
         $stok_barang = Inventori::find($id);
         return view ('inventori.edit',compact('stok_barang'));
     }
-    
+
     public function update(Request $request, $id)
     {
         $stok_barang= Inventori::findOrFail($id);
         // $data_pegawai->update($request->all());
 
          // Hasil Input dimasukkan ke database
-         
+
         $stok_barang->nama= $request->nama;
         $stok_barang->merk= $request->merk;
         $stok_barang->jenis= $request->jenis;
@@ -129,13 +135,13 @@ class InventoriController extends Controller
         $stok_barang->satuan= $request->satuan;
         $stok_barang->harga= $request->harga;
         $stok_barang->update();
-  
+
         //  $stok_barang->update();
 
         if($request->hasFile('gambar')) {
             $request->file('gambar')->move('images/inventori/',$request->file('gambar')->getClientOriginalName());
             $stok_barang->gambar = $request->file('gambar')->getClientOriginalName();
-         
+
             $stok_barang->update();
         }
         return redirect()->route('inventori.index')->with('notifikasi_sukses', 'Data '.$stok_barang->nama.' sudah diupdate!');
@@ -160,14 +166,14 @@ class InventoriController extends Controller
 
         $stok_barang->update();
         return redirect()->route('inventori.stock')->with('notifikasi_sukses', 'Stok '.$stok_barang->nama.' sudah diupdate!');
-    }   
-    
+    }
+
     public function minimum_stock_update(Request $request, $id)
     {
         $stok_barang= Inventori::findOrFail($id);
         $stok_minimal = $request->stok_minimal;
         $stok_barang->stok_minimal= $stok_minimal;
-        
+
         $kuantitas = $stok_barang->kuantitas;
         $habis = 0;
 
@@ -178,9 +184,9 @@ class InventoriController extends Controller
         } elseif($kuantitas == $habis) {
             $status = $stok_barang->status = "Habis";
         }
-        
+
         $stok_barang->update();
-        return redirect()->route('inventori.price')->with('notifikasi_sukses', 'Jumlah stok minimal '.$stok_barang->nama.' sudah diupdate!');
+        return redirect()->route('inventori.stock')->with('notifikasi_sukses', 'Jumlah stok minimal '.$stok_barang->nama.' sudah diupdate!');
     }
 
     public function price_update(Request $request, $id)
@@ -194,7 +200,10 @@ class InventoriController extends Controller
 
     public function destroy($id)
     {
-        $stok_barang = Inventori::findOrFail($id);
+        $id_barang = Crypt::decryptString($id);
+
+        $stok_barang = Inventori::find($id_barang);
+        // $stok_barang = Inventori::findOrFail($id);
         $stok_barang->delete();
         return redirect()->route('inventori.index')->with('notifikasi_sukses', 'Data sudah dihapus!');
     }

@@ -11,17 +11,17 @@
 @if($data_user)
     @section('authuser.active')
     active
-    @endsection 
+    @endsection
 
     @section('authusereditpassword.active')
     active
     @endsection
 
-@else 
+@else
 
     @section('user.active')
     active
-    @endsection 
+    @endsection
 
     @section('userindex.active')
     active
@@ -43,8 +43,8 @@
     <div class="section-body">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <a href="{{ route('user.index') }}" class="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm">
-                <i class="fas fa-chevron-left mr-2"></i> Kembali</a>
+            <a href="{{ route('user.index') }}" class="d-none d-sm-inline-block btn btn-md btn-danger shadow-sm">
+            <i class="fas fa-chevron-left mr-2"></i> Kembali</a>
         </div>
         <div class="row d-flex justify-content-center ">
             <div class="card card-primary">
@@ -53,17 +53,17 @@
                 </div>
 
                 @if(session('notifikasi_gagal'))
-                <div class="alert alert-success alert-dismissible m-3 show fade" role="alert">
+                <div class="alert alert-danger alert-dismissible m-3 show fade" role="alert">
                   <div class="alert-body">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <i class="fas fa-check"></i>
                     {{session('notifikasi_gagal')}}
-                  </div>  
+                  </div>
                 </div>
                 @endif
-            
+
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -73,7 +73,7 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6 col-lg-6">
                                         <div class="form-group {{$errors->has('email') ? 'has-error' : ''}} ">
-                                            <label for="email" class="form-label"> Email : </label> 
+                                            <label for="email" class="form-label"> Email : </label>
                                             <input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
                                             @if($errors->has('email'))
                                             <span class="help-block text-danger">{{$errors->first('email')}}</span>
@@ -82,13 +82,16 @@
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-6">
                                         <div class="form-group {{$errors->has('password_lama') ? 'has-error' : ''}} ">
-                                            <label for="password_lama" class="form-label"> Password Lama : </label> 
+                                            <label for="password_lama" class="form-label"> Password Lama : </label>
                                             <input type="password" class="form-control" id="password_lama" name="password_lama" placeholder="Password Lama">
                                             @if($errors->has('password_lama'))
                                             <span class="help-block text-danger">{{$errors->first('password_lama')}}</span>
                                             @endif
                                         </div>
                                     </div>
+                                    @if($errors->has('error'))
+                                        <span class="help-block text-danger">{{$errors->first('error')}}</span>
+                                    @endif
                                 </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
@@ -96,21 +99,21 @@
                                         <label class="custom-control-label" for="show-password">Show Password</label>
                                     </div>
                                 </div>
-                                
+
                                 <br>
                                 <hr>
                                 <br>
 
                                 <div class="section-title mt-1 mb-4"><h5>Password Baru</h5></div>
                                 <div class="form-group {{$errors->has('password') ? 'has-error' : ''}} ">
-                                    <label for="password" class="form-label"> Password Baru : </label> 
+                                    <label for="password" class="form-label"> Password Baru : </label>
                                     <input type="password" class="form-control" id="password" name="password" placeholder="Password Baru">
                                     @if($errors->has('password'))
                                     <span class="help-block text-danger">{{$errors->first('password')}}</span>
                                     @endif
                                 </div>
                                 <div class="form-group {{$errors->has('konfirmasi_password') ? 'has-error' : ''}} ">
-                                    <label for="konfirmasi_password" class="form-label"> Konfirmasi Password : </label> 
+                                    <label for="konfirmasi_password" class="form-label"> Konfirmasi Password : </label>
                                     <input type="password" class="form-control" id="konfirmasi_password" name="konfirmasi_password" placeholder="Konfirmasi Password">
                                     @if($errors->has('konfirmasi_password'))
                                     <span class="help-block text-danger">{{$errors->first('konfirmasi_password')}}</span>
@@ -124,7 +127,7 @@
                                     </div>
                                 </div>
                                 {{-- <div class="form-group {{$errors->has('id') ? 'has-error' : ''}} ">
-                                    <label for="id" class="form-label"> Id : </label> 
+                                    <label for="id" class="form-label"> Id : </label>
                                     <input type="number" class="form-control" id="id" name="id" placeholder="Password" value="{{auth()->user()->id }}">
                                     @if($errors->has('id'))
                                     <span class="help-block text-danger">{{$errors->first('id')}}</span>
@@ -146,7 +149,7 @@
                 </form>
             </div>
         </div>
-        
+
 
 
 
@@ -161,7 +164,7 @@
             x.type = "password";
         }
         }
-        
+
         function showPasswordBaru() {
         var x = document.getElementById("password");
         if (x.type === "password") {
@@ -177,7 +180,7 @@
         }
         }
 
-        
+
     </script>
 </section>
 @endsection

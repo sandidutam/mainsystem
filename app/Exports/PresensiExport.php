@@ -16,7 +16,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class PresensiExport implements FromQuery, WithMapping, WithHeadings, WithTitle, ShouldAutoSize, WithStyles, WithEvents
+class PresensiExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSize, WithStyles, WithEvents
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -29,10 +29,10 @@ class PresensiExport implements FromQuery, WithMapping, WithHeadings, WithTitle,
         return [
             [
                 $presensi->tanggal,
-                $presensi->nomor_pegawai,
-                $presensi->nama_lengkap,
+                $presensi->pegawai->nomor_pegawai,
+                $presensi->pegawai->nama_lengkap(),
                 $presensi->jabatan,
-                $presensi->sektor_area,
+                $presensi->pegawai->sektor_area,
                 $presensi->jam_masuk,
                 $presensi->jam_keluar,
                 $presensi->catatan(),
@@ -61,28 +61,14 @@ class PresensiExport implements FromQuery, WithMapping, WithHeadings, WithTitle,
          ];
     }
 
-    use Exportable;
 
-    private $month;
-    private $year;
 
-    public function __construct(int $year, int $month)
-    {
-        $this->month = $month;
-        $this->year  = $year;
-    }
-
-   
     public function query()
     {
         return Presensi::query();
     }
 
-  
-    public function title(): string
-    {
-        return 'Month ' . $this->month;
-    }
+
 
     public function styles(Worksheet $sheet)
     {
@@ -104,13 +90,13 @@ class PresensiExport implements FromQuery, WithMapping, WithHeadings, WithTitle,
     {
         return [
             AfterSheet::class=>function(AfterSheet $event) {
-  
+
                 $event->sheet->getDelegate()->getStyle('A2:I2')
                         ->getFill()
                         ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                         ->getStartColor()
                         ->setARGB('00000000');
-  
+
             },
         ];
     }

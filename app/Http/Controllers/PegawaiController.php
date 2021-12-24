@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
+use App\Models\Presensi;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,48 @@ class PegawaiController extends Controller
         // $data_pegawai = Pegawai::paginate(100);
         // $data_pegawai = Pegawai::all();
         // return view('pegawai.index',compact('data_pegawai'));
-        return view('pegawai.index', ['data_pegawai'=> Pegawai::get()]);
+
+
+        $s1 = Pegawai::orderBy('nama_depan','ASC')->orderBy('nama_depan','ASC')->where('sektor_area','1')->get();
+        $s2 = Pegawai::orderBy('nama_depan','ASC')->orderBy('nama_depan','ASC')->where('sektor_area','2')->get();
+        $s3 = Pegawai::where('sektor_area','3')->orderBy('nama_depan','ASC')->orderBy('nama_belakang','ASC')->get();
+        $s4 = Pegawai::where('sektor_area','4')->orderBy('nama_depan','ASC')->orderBy('nama_belakang','ASC')->get();
+
+        $jml_s1 = Pegawai::where('sektor_area','1')->count();
+        $jml_s2 = Pegawai::where('sektor_area','2')->count();
+        $jml_s3 = Pegawai::where('sektor_area','3')->count();
+        $jml_s4 = Pegawai::where('sektor_area','4')->count();
+
+
+        // return $s2;
+        $data_hadir = Presensi::whereHas('pegawai', function ($query) {
+                                $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+                                $query->where('tanggal', '=', $today)
+                                ->where('jam_masuk', '!=', '00:00:00')
+                                ->where('catatan_masuk', '!=', '-');
+                                })->with('pegawai')->get();
+
+        // $s1_belum_hadir = Pegawai::select("*")
+        //                     ->where('sektor_area','1')
+        //                     ->whereDoesntHave('presensi', function ($query) {
+        //                     $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+        //                     $query->where('tanggal', $today);
+        //                     })
+        //                     ->get();
+
+        // return $s1_belum_hadir;
+
+        $data_pegawai = Pegawai::all();
+
+        return view('pegawai.index', compact('data_pegawai',
+                                                's1',
+                                                's2',
+                                                's3',
+                                                's4',
+                                                'jml_s1',
+                                                'jml_s2',
+                                                'jml_s3',
+                                                'jml_s4'));
     }
 
     /**
@@ -138,7 +180,7 @@ class PegawaiController extends Controller
 
             if($simpan)
             {
-                return redirect('/pegawai')->with('notifikasi_create','Data '.$nama_lengkap.' sudah diinput!' );
+                return redirect('/pegawai')->with('notifikasi_success','Data '.$nama_lengkap.' sudah diinput!' );
                 // return redirect()->route('pegawai.index');
             }
         }
@@ -250,7 +292,7 @@ class PegawaiController extends Controller
 
             $data_pegawai->update();
         }
-        return redirect()->route('pegawai.index')->with('notifikasi_update','Data '.$data_pegawai->nama_lengkap().' sudah diupdate!' );
+        return redirect()->route('pegawai.index')->with('notifikasi_success','Data '.$data_pegawai->nama_lengkap().' sudah diupdate!' );
     }
 
     /**

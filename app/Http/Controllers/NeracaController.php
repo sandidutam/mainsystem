@@ -7,6 +7,7 @@ use App\Models\Neraca;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\NeracaExport;
 use PDF;
@@ -41,7 +42,7 @@ class NeracaController extends Controller
                         ->sum('debit');
 
         // return $suma;
-        
+
         $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         return view('neraca.debit', compact('neraca','today','sum'));
     }
@@ -57,14 +58,16 @@ class NeracaController extends Controller
                         ->sum('kredit');
 
         // return $sum;
-        
+
         $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         return view('neraca.kredit', compact('neraca','today','sum'));
     }
 
     public function show($id)
     {
-        $neraca = Neraca::find($id);
+        $id_neraca = Crypt::decryptString($id);
+
+        $neraca = Neraca::find($id_neraca);
         return view ('neraca.detail',compact('neraca'));
     }
 
@@ -84,7 +87,7 @@ class NeracaController extends Controller
                                 ->withErrors($validator)
                                 ->withInput();
         }
-        
+
         $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         $this_month = Carbon::now()->timezone('Asia/Jakarta')->format('Y'.'m');
 
@@ -104,14 +107,14 @@ class NeracaController extends Controller
         $tahun = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y');
         $bulan = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('m');
         $hari = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('d');
-        
+
         if($request->filled('debit')) {
 
             if($index->isEmpty()) {
                 $idbaru = 0;
                 $no_trans= 'TR/DBIT/'.$tahun.'/'.$bulan.'/'.str_pad($idbaru+1, 4, '0', STR_PAD_LEFT);
                 // return "noldebit";
-            } 
+            }
             elseif ( $check_debit == 0 ) {
                 $idbaru = 0;
                 $no_trans= 'TR/DBIT/'.$tahun.'/'.$bulan.'/'.str_pad($idbaru+1, 4, '0', STR_PAD_LEFT);
@@ -120,16 +123,16 @@ class NeracaController extends Controller
             elseif ( $check_debit > 0 ) {
                 $idlama = $check_debit;
                 $idbaru = $idlama + 1;
-        
+
                 $no_trans= 'TR/DBIT/'.$tahun.'/'.$bulan.'/'.str_pad($idbaru, 4, '0', STR_PAD_LEFT);
                 // return "satudebit";
             }
 
             // return "debit ada";
-            
-        } 
+
+        }
         elseif ($request->filled('kredit')) {
-            
+
             if($index->isEmpty()) {
                 $idbaru = 0;
                 $no_trans= 'TR/KDIT/'.$tahun.'/'.$bulan.'/'.str_pad($idbaru+1, 4, '0', STR_PAD_LEFT);
@@ -143,17 +146,17 @@ class NeracaController extends Controller
             elseif ( $check_kredit > 0 ) {
                 $idlama = $check_kredit;
                 $idbaru = $idlama + 1;
-        
+
                 $no_trans= 'TR/KDIT/'.$tahun.'/'.$bulan.'/'.str_pad($idbaru, 4, '0', STR_PAD_LEFT);
                 // return "satukredit";
-                
+
             }
 
             // return "kredit ada";
 
         }
 
- 
+
         $data = new Neraca();
         $data->nomor_akun = $no_trans;
         $data->akun = $request->transaksi;
@@ -162,7 +165,7 @@ class NeracaController extends Controller
         $data->kredit = $request->kredit;
         $data->tanggal = $tgl_transaksi;
         $simpan = $data->save();
-        
+
         if($request->hasFile('foto_bukti')) {
             $request->file('foto_bukti')->move('images/transaksi/',$request->file('foto_bukti')->getClientOriginalName());
             $data->foto_bukti = $request->file('foto_bukti')->getClientOriginalName();
@@ -174,8 +177,8 @@ class NeracaController extends Controller
             $data->file_bukti = $request->file('file_bukti')->getClientOriginalName();
             $simpan = $data->save();
         }
-       
-        if($simpan) 
+
+        if($simpan)
         {
             return redirect()->route('neraca.index')->with('notifikasi_sukses', 'Transaksi baru sudah diinput ke neraca!');
         }
@@ -183,7 +186,9 @@ class NeracaController extends Controller
 
     public function edit($id)
     {
-        $neraca = Neraca::find($id);
+        $id_neraca = Crypt::decryptString($id);
+
+        $neraca = Neraca::find($id_neraca);
         return view ('neraca.edit',compact('neraca'));
     }
 
@@ -193,7 +198,7 @@ class NeracaController extends Controller
         // $data_pegawai->update($request->all());
 
          // Hasil Input dimasukkan ke database
-        
+
 
         $tgl_transaksi = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y-m-d');
 
@@ -201,11 +206,11 @@ class NeracaController extends Controller
         $neraca->debit = $request->debit;
         $neraca->kredit = $request->kredit;
         $neraca->tanggal = $tgl_transaksi;
-        
+
         if($request->hasFile('foto_bukti')) {
             $request->file('foto_bukti')->move('images/transaksi/',$request->file('foto_bukti')->getClientOriginalName());
             $data->gambar = $request->file('foto_bukti')->getClientOriginalName();
-            
+
         }
 
         if($request->hasFile('file_bukti')) {
@@ -213,8 +218,8 @@ class NeracaController extends Controller
             $neraca->gambar = $request->file('file_bukti')->getClientOriginalName();
             $simpan = $neraca->update();
         }
-  
-       
+
+
         return redirect()->route('neraca.index')->with('notifikasi_sukses', 'Transaksi '.$neraca->akun.' sudah diupdate!');
     }
 
@@ -225,7 +230,7 @@ class NeracaController extends Controller
         return redirect()->route('neraca.index')->with('notifikasi_sukses', 'Data sudah dihapus!');
     }
 
-    public function exportExcel() 
+    public function exportExcel()
     {
         // return Excel::download(new PresensiExport, 'Presensi.xlsx');
         return Excel::download(new NeracaExport, 'Neraca.xlsx');

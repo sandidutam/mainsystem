@@ -32,7 +32,7 @@ active
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <a href="/pegawai" class="btn btn-primary ">
+            <a href="/pegawai" class="btn btn-danger ">
                 <span class="icon">
                     <i class="fas fa-chevron-left mr-2"></i>
                 </span>

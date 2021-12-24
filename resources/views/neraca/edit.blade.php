@@ -10,7 +10,7 @@
 
 @section('neraca.active')
 active
-@endsection 
+@endsection
 
 @section('neracaindex.active')
 active
@@ -24,12 +24,12 @@ active
                 <div class="breadcrumb-item active"><a href="{{route('inventori.index')}}">Menu Neraca</a></div>
                 <div class="breadcrumb-item">Edit Neraca</div>
             </div>
-        </div>    
-    
+        </div>
+
         <div class="section-body">
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <a href="{{ route('neraca.index') }}" class="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm">
+                <a href="{{ route('neraca.index') }}" class="d-none d-sm-inline-block btn btn-md btn-danger shadow-sm">
                 <i class="fas fa-chevron-left mr-2"></i> Kembali</a>
             </div>
 
@@ -38,27 +38,27 @@ active
                     <div class="card-header">
                         <h4 class="m-0 font-weight-bold text-primary">Form Edit Transaksi - {{$neraca->akun}}</h4>
                     </div>
-                
+
                     <div class="card-body">
                         {!! Form::model($neraca ,['route'=>['neraca.update', $neraca->id], 'method'=>'PUT','enctype'=>'multipart/form-data']) !!}
-        
+
                             <div class="row">
                                 <div class="col">
-                                    <div class="form-group {{$errors->has('akun') ? 'has-error' : ''}} "> 
-                                        <label for="akun" class="form-label"> Nama Transaksi : </label> 
+                                    <div class="form-group {{$errors->has('akun') ? 'has-error' : ''}} ">
+                                        <label for="akun" class="form-label"> Nama Transaksi : </label>
                                         {!! Form::text('akun', null, ['class'=>'form-control','id'=>'akun']) !!}
                                     </div>
-                                    
+
                                     <div class="form-group {{$errors->has('deskripsi') ? 'has-error' : ''}} ">
                                         <label for="deskripsi"> Deskripsi : </label>
                                         {!! Form::textarea('deskripsi', null, ['class'=>'form-control','id'=>'deskripsi']) !!}
                                     </div>
-                                    
+
                                     <div class="row">
                                         <div class="col-12 col-md-6 col-lg-6">
                                             @if (!empty($neraca->debit))
-                                            <div class="form-group {{$errors->has('kuantitas') ? 'has-error' : ''}} "> 
-                                                <label for="kuantitas" class="form-label"> Debit : </label> 
+                                            <div class="form-group {{$errors->has('kuantitas') ? 'has-error' : ''}} ">
+                                                <label for="kuantitas" class="form-label"> Debit : </label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">
@@ -71,9 +71,9 @@ active
                                                     <span class="help-block text-danger">{{$errors->first('debit')}}</span>
                                                 @endif
                                             </div>
-                                            @else 
-                                            <div class="form-group {{$errors->has('kuantitas') ? 'has-error' : ''}} "> 
-                                                <label for="kuantitas" class="form-label"> Debit : </label> 
+                                            @else
+                                            <div class="form-group {{$errors->has('kuantitas') ? 'has-error' : ''}} ">
+                                                <label for="kuantitas" class="form-label"> Debit : </label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">
@@ -123,12 +123,12 @@ active
                                         </div>
                                     </div>
 
-                                    <div class="form-group" > 
-                                        <label for="tanggal" class="form-label"> Tanggal Transaksi : </label> 
+                                    <div class="form-group" >
+                                        <label for="tanggal" class="form-label"> Tanggal Transaksi : </label>
                                         {!! Form::text('tanggal', date('d-m-Y', strtotime($neraca->tanggal)) , ['class'=>'datepicker form-control','id'=>'tanggal','disabled']) !!}
                                     </div>
-    
-                                    <div class="form-group {{$errors->has('foto_bukti') ? 'has-error' : ''}} "> 
+
+                                    <div class="form-group {{$errors->has('foto_bukti') ? 'has-error' : ''}} ">
                                     <div class="mb-3">
                                         <label for="foto_bukti" class="form-label">Unggah Gambar Transaksi :</label>
                                         <div class="custom-file">
@@ -139,9 +139,9 @@ active
                                             <span class="help-block text-danger">{{$errors->first('foto_bukti')}}</span>
                                         @endif
                                     </div>
-                                </div>   
+                                </div>
 
-                                <div class="form-group {{$errors->has('file_bukti') ? 'has-error' : ''}} "> 
+                                <div class="form-group {{$errors->has('file_bukti') ? 'has-error' : ''}} ">
                                     <div class="mb-3">
                                         <label for="file_bukti" class="form-label">Unggah File Bukti Transaksi :</label>
                                         <div class="custom-file">
@@ -152,11 +152,11 @@ active
                                             <span class="help-block text-danger">{{$errors->first('file_bukti')}}</span>
                                         @endif
                                     </div>
-                                </div>   
                                 </div>
-    
-                                
-                                
+                                </div>
+
+
+
                             </div>
                             <div class="d-flex justify-content-start mb-3 ">
                                 <div class="row">
@@ -171,17 +171,17 @@ active
                     </div>
                 </div>
             </div>
-            
+
                     {!! Form::close() !!}
 
 
 
         </div>
         <script type="text/javascript">
-            $('.datepicker').datepicker({  
+            $('.datepicker').datepicker({
                format: 'yyyy-mm-dd'
-             });  
-        </script> 
-    </section>    
+             });
+        </script>
+    </section>
 
 @endsection

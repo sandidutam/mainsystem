@@ -21,6 +21,7 @@ class PegawaiSeeder extends Seeder
 
     	      // insert data ke table pegawai menggunakan Faker
     		DB::table('pegawai')->insert([
+                'nomor_pegawai' => 'PGW-'.random_int(100000, 999999),
     			'nama_depan' => $faker->firstName,
     			'nama_belakang' => $faker->lastName,
     			'tempat_lahir' => $faker->city,
@@ -38,7 +39,7 @@ class PegawaiSeeder extends Seeder
     			'sektor_area' => $faker->randomElement(['1','2','3','4']),
     			'tanggal_diterima' => $faker->date,
     			'no_hp' => $faker->phoneNumber,
-    			'foto_pegawai' => 'default.jpg',
+    			'foto_pegawai' => 'default.jpeg',
 
     		]);
 

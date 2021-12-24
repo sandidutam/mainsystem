@@ -85,7 +85,7 @@ active
                                 {{$belum_hadir}}
                                 <i class="fas fa-chevron-down" style="color: #6777EF"></i>
                             </div>
-                            <div class="card chat-box" id="mychatbox" style="height: 200px">
+                            <div class="card chat-box" id="mychatbox" style="height: 200px;">
                                 <div class="card-body chat-content">
                                     <div>
                                         <table>
@@ -95,7 +95,7 @@ active
                                                     <td>
                                                         <img style="height: 45px; width: 45px; border-radius: 30px; border: 2px solid #6777EF; object-fit: cover;" src="{{$item->getFotoPegawai()}}" class="mr-4 mb-4">
                                                     </td>
-                                                    <td style="padding-bottom : 20px;">
+                                                    <td style="padding-bottom : 25px;">
                                                         {{$item->nama_lengkap()}}
                                                     </td>
                                                 </tr>
@@ -246,14 +246,14 @@ active
 
         <div class="card">
             <div class="card-header">
-                <h4 class="mr-4">Tabel Presensi</h4>
+                <h4>Tabel Presensi</h4>
                 <div class="dropdown d-inline">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Download File
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item has-icon" href="{{route('presensi.exportexcel')}}"><i class="far fa-file-excel"></i> Excel</a>
-                        <a class="dropdown-item has-icon" href="{{route('presensi.exportpdf')}}"><i class="far fa-file-pdf"></i> PDF</a>
+                        <a class="dropdown-item has-icon" href="{{route('presensi.exportexcel')}}"><i class="far fa-file-excel" style="color: green"></i> Excel</a>
+                        <a class="dropdown-item has-icon" href="{{route('presensi.exportpdf')}}"><i class="far fa-file-pdf" style="color: red"></i> PDF</a>
                     </div>
                 </div>
             </div>
@@ -269,11 +269,10 @@ active
                             <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#today-presensi" role="tab" aria-controls="profile" aria-selected="false" style="font-size: 18px">Hari Ini</a>
                             </li>
                         </ul>
-
                     </div>
                 </div>
 
-                <div class="tab-content" id="myTabContent2">
+                <div class="tab-content tab-bordered" id="myTabContent2">
                     <div class="tab-pane fade show active" id="all-presensi" role="tabpanel" aria-labelledby="home-tab3">
                         <div class="row justify-content-start mx-1 my-4">
                             <h5>Tabel Presensi Keseluruhan</h5>
@@ -293,7 +292,9 @@ active
                                     <th>JAM KELUAR</th>
                                     <th>CATATAN</th>
                                     <th>KETERANGAN</th>
+                                    @if(auth()->user()->role == "SuperAdmin")
                                     <th>AKSI</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -335,6 +336,7 @@ active
                                         -
                                         @endif
                                     </td>
+                                    @if(auth()->user()->role == "SuperAdmin")
                                     <td>
                                         <div class="row">
                                             <div class="col">
@@ -346,12 +348,10 @@ active
                                             </div>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                                 <?php $i++; ?>
                                 @empty
-                                <tr>
-                                    <td colspan="11" class="text-center text-white bg-secondary"><i><b>TIDAK ADA DATA UNTUK DITAMPILKAN</b></i></td>
-                                </tr>
                                 @endforelse
                             </tbody>
                             </table>
@@ -376,7 +376,9 @@ active
                                     <th>JAM KELUAR</th>
                                     <th>CATATAN</th>
                                     <th>KETERANGAN</th>
+                                    @if(auth()->user()->role == "SuperAdmin")
                                     <th>AKSI</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -418,6 +420,7 @@ active
                                         -
                                         @endif
                                     </td>
+                                    @if(auth()->user()->role == "SuperAdmin")
                                     <td>
                                         <div class="row">
                                             <div class="col">
@@ -429,12 +432,10 @@ active
                                             </div>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                                 <?php $i++; ?>
                                 @empty
-                                <tr>
-                                    <td colspan="11" class="text-center text-white bg-secondary"><i><b>TIDAK ADA DATA UNTUK DITAMPILKAN</b></i></td>
-                                </tr>
                                 @endforelse
                             </tbody>
                             </table>

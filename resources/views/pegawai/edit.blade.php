@@ -29,7 +29,7 @@ active
     <div class="section-body">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <a href="{{ route('pegawai.index') }}" class="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm">
+        <a href="{{ route('pegawai.index') }}" class="d-none d-sm-inline-block btn btn-md btn-danger shadow-sm">
             <i class="fas fa-chevron-left mr-2"></i> Kembali</a>
     </div>
     <div class="card">

@@ -197,15 +197,34 @@
         <img src="{{(auth()->user()->getFotoUser())}}" alt="...">
       </figure>
       {{-- <img alt="image" src="{{(auth()->user()->getFotoUser())}}" class="rounded-circle mr-1"> --}}
-      <div class="d-sm-none d-lg-inline-block">Hi, {{auth()->user()->nama_lengkap()}}</div></a>
+      @if ( auth()->user()->role == "SuperAdmin" )
+      <div class="d-sm-none d-lg-inline-block">Hi, {{auth()->user()->nama_lengkap()}} <i class="fas fa-crown" style="color: gold"></i> </div></a>
+      @else
+      <div class="d-sm-none d-lg-inline-block">Hi, {{auth()->user()->nama_lengkap()}} </div></a>
+      @endif
       <div class="dropdown-menu dropdown-menu-right">
-        <div class="dropdown-title">Logged in {{auth()->user()->last_login_at}}</div>
+        <div class="dropdown-title">
+            {{-- {{$today}} --}}
+            <div hidden>
+                {{$today = \Carbon\Carbon::now()->timezone('Asia/Jakarta')->format('H:i:s')}}
+                {{$diff = \Carbon\Carbon::parse(auth()->user()->last_login_at)->diffInHours($today)}}
+            </div>
+            Logged in
+            @if ( $diff == 0 )
+
+            @elseif (  $diff != 0 )
+            {{\Carbon\Carbon::parse(auth()->user()->last_login_at)->diffInHours($today)}} jam
+            @endif
+            {{\Carbon\Carbon::parse(auth()->user()->last_login_at)->diff($today)->i}} menit yang lalu.
+
+            {{-- {{date('d M y', strtotime(auth()->user()->last_login_at))}} at {{date('H:i', strtotime(auth()->user()->last_login_at))}} WIB --}}
+        </div>
         <a href="{{ route('user.show', Crypt::encryptString(auth()->user()->id)) }}" class="dropdown-item has-icon">
           <i class="far fa-user"></i> Profile
         </a>
-        <a href="features-activities.html" class="dropdown-item has-icon">
+        {{-- <a href="features-activities.html" class="dropdown-item has-icon">
           <i class="fas fa-bolt"></i> Activities
-        </a>
+        </a> --}}
         <a href="{{ route('user.edit', Crypt::encryptString(auth()->user()->id)) }}" class="dropdown-item has-icon">
           <i class="fas fa-cog"></i> Edit Profile
         </a>

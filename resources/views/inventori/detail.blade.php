@@ -10,7 +10,7 @@
 
 @section('inventori.active')
 active
-@endsection 
+@endsection
 
 @section('inventoriindex.active')
 active
@@ -29,31 +29,31 @@ active
         <div class="section-body">
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <a href="{{ route('inventori.index') }}" class="btn btn-primary ">
+                <a href="{{ route('inventori.index') }}" class="btn btn-danger ">
                     <span class="icon">
                         <i class="fas fa-chevron-left mr-2"></i>
                     </span>
-                    <span class="text">Index Barang</span>
+                    <span class="text">Kembali</span>
                 </a>
             </div>
-            
+
             <div class="row">
                 <div class="col">
                     <div class="card">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Detail Barang {{$stok_barang->nama}}</h6>
                         </div>
-                   
+
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-5 text-center card-split">
                                     <img class="img" style="margin-top: 50px; margin-bottom: 25px; width:250px; height:250px" src="{{$stok_barang->getGambarBarang()}}" alt="">
                                     <h3 class="mt-2 mb-2"><strong>{{$stok_barang->nama}}</strong></h3>
                                     <p class="mt-2" >{{$stok_barang->jenis}}</p>
-        
+
                                 </div>
                                 <div class="col">
-                                    <div class="table-responsive">  
+                                    <div class="table-responsive">
                                         <table class="table table-striped table-hover" id="dataTable" width="100%" cellspacing="0">
                                             <tr>
                                                 <td>Nama </td><td>{{$stok_barang->nama}}</a></td>
@@ -76,15 +76,15 @@ active
                                             <tr>
                                                 <td>Update Terakhir</td><td>{{$stok_barang->updated_at->format('d-m-Y') }}</a></td>
                                             </tr>
-                                        </table>  
-                                    </div> 
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        
+
 
 
 

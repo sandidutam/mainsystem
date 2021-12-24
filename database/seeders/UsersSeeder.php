@@ -22,8 +22,6 @@ class UsersSeeder extends Seeder
         $faker = Faker::create('id_ID');
 
 
-
-
     	DB::table('users')->insert([
     		'nama_depan' => 'Sandi Duta',
     		'nama_belakang' => 'Maulana',

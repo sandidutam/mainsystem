@@ -34,15 +34,7 @@
 
 
               <div class="card-body">
-                @if(session('notifikasi_gagal'))
-                <div class="alert alert-danger alert-dismissible mt-4 fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <i class="fa fa-exclamation-triangle"></i>
-                    {{session('notifikasi_gagal')}}
-                </div>
-                @endif
+
                 @if(session('message'))
                 <div class="alert alert-success alert-dismissible mt-4 fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -55,6 +47,9 @@
 
                 <form method="POST" action="/postlogin" class="needs-validation" novalidate="">
                   @csrf
+                    @if($errors->has('error'))
+                        <span class="help-block text-danger">{{$errors->first('error')}}</span>
+                    @endif
                   <div class="form-group">
                     <label for="email">Email</label>
                     <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
@@ -85,12 +80,12 @@
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  {{-- <div class="form-group">
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
                       <label class="custom-control-label" for="remember-me">Remember Me</label>
                     </div>
-                  </div>
+                  </div> --}}
 
                   <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">

@@ -22,7 +22,7 @@ class CreateInventoriTable extends Migration
             $table->string('deskripsi')->nullable();
             $table->integer('kuantitas');
             $table->string('satuan');
-            $table->integer('harga');
+            $table->string('harga');
             $table->string('gambar');
             $table->integer('stok_minimal');
             $table->string('status');

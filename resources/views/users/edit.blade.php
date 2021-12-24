@@ -43,7 +43,7 @@
     <div class="section-body">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <a href="{{ route('user.index') }}" class="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm">
+            <a href="{{ route('user.index') }}" class="d-none d-sm-inline-block btn btn-md btn-danger shadow-sm">
                 <i class="fas fa-chevron-left mr-2"></i> Kembali</a>
         </div>
         <div class="row">
@@ -101,7 +101,7 @@
                                 <option selected="true" style='display: none' value="">Pilih</option>
                                 <option {{old('role', $data_user->role)=="SuperAdmin"? 'selected':''}} value="SuperAdmin">SuperAdmin</option>
                                 <option {{old('role', $data_user->role)=="Admin"? 'selected':''}} value="Admin">Admin</option>
-                                <option {{old('role', $data_user->role)=="Staff"? 'selected':''}} value="Staff">Staff</option>
+                                <option {{old('role', $data_user->role)=="Akuntan"? 'selected':''}} value="Akuntan">Akuntan</option>
                                 <option {{old('role', $data_user->role)=="Mandor"? 'selected':''}} value="Mandor">Mandor</option>
                                 </select>
                                 @if($errors->has('role'))
