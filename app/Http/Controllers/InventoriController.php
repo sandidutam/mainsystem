@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use Illuminate\Http\Request;
 use App\Models\Inventori;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +15,7 @@ class InventoriController extends Controller
     public function index()
     {
         $stok_barang = Inventori::all();
+
         return view('inventori.index', compact('stok_barang'));
     }
 
@@ -100,8 +102,10 @@ class InventoriController extends Controller
 
         if($simpan)
         {
-            return redirect()->route('inventori.index')->with('notifikasi_sukses', 'Stok '.$data->nama.' sudah diinput!');
-            // return redirect()->route('pegawai.index');
+            Alert::success('Input Data Inventori Berhasil', 'Data '.$data->nama.' sudah berhasil diinput!');
+
+            // return redirect()->route('inventori.index')->with('notifikasi_sukses', 'Stok '.$data->nama.' sudah diinput!');
+            return redirect()->intended('/inventori');
         }
     }
 
@@ -144,7 +148,9 @@ class InventoriController extends Controller
 
             $stok_barang->update();
         }
-        return redirect()->route('inventori.index')->with('notifikasi_sukses', 'Data '.$stok_barang->nama.' sudah diupdate!');
+        Alert::success('Update Data Inventori Berhasil', 'Data '.$stok_barang->nama.' sudah berhasil di update!');
+
+        return redirect()->intended('/inventori');
     }
 
     public function stock_update(Request $request, $id)
@@ -165,7 +171,11 @@ class InventoriController extends Controller
         }
 
         $stok_barang->update();
-        return redirect()->route('inventori.stock')->with('notifikasi_sukses', 'Stok '.$stok_barang->nama.' sudah diupdate!');
+
+        Alert::success('Update Stok '.$stok_barang->nama.' Berhasil', 'Stok '.$stok_barang->nama.' sudah berhasil di update!');
+
+        // return redirect()->route('inventori.stock')->with('notifikasi_sukses', 'Stok '.$stok_barang->nama.' sudah diupdate!');
+        return redirect()->intended('/inventori/stok');
     }
 
     public function minimum_stock_update(Request $request, $id)
@@ -186,7 +196,10 @@ class InventoriController extends Controller
         }
 
         $stok_barang->update();
-        return redirect()->route('inventori.stock')->with('notifikasi_sukses', 'Jumlah stok minimal '.$stok_barang->nama.' sudah diupdate!');
+
+        Alert::success('Update Jumlah Stok Minimum '.$stok_barang->nama.' Berhasil', 'Limit minimum stok '.$stok_barang->nama.' sudah berhasil di update!');
+
+        return redirect()->intended('/inventori/stok');
     }
 
     public function price_update(Request $request, $id)
@@ -194,7 +207,11 @@ class InventoriController extends Controller
         $stok_barang= Inventori::findOrFail($id);
         $stok_barang->harga= $request->harga;
         $stok_barang->update();
-        return redirect()->route('inventori.price')->with('notifikasi_sukses', 'Harga '.$stok_barang->nama.' sudah diupdate!');
+
+        Alert::success('Update Harga '.$stok_barang->nama.' Berhasil', 'Harga '.$stok_barang->nama.' sudah berhasil di update!');
+
+        return redirect()->intended('/inventori/priceindex');
+
     }
 
 
@@ -205,6 +222,10 @@ class InventoriController extends Controller
         $stok_barang = Inventori::find($id_barang);
         // $stok_barang = Inventori::findOrFail($id);
         $stok_barang->delete();
-        return redirect()->route('inventori.index')->with('notifikasi_sukses', 'Data sudah dihapus!');
+
+        Alert::success('Data Inventori Berhasil Dihapus!', 'Data inventori '.$stok_barang->nama.' sudah berhasil di hapus!');
+
+        return redirect()->intended('/inventori');
+
     }
 }

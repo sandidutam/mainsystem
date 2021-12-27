@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
 use App\Models\Presensi;
@@ -65,7 +66,8 @@ class PegawaiController extends Controller
                                                 'jml_s1',
                                                 'jml_s2',
                                                 'jml_s3',
-                                                'jml_s4'));
+                                                'jml_s4'
+                                            ));
     }
 
     /**
@@ -157,6 +159,7 @@ class PegawaiController extends Controller
 
             // Hasil Input dimasukkan ke database
             $data = new Pegawai();
+            $data->status = "Belum Hadir";
             $data->nomor_pegawai = $no_pegawai;
             $data->nama_depan = $nama_depan;
             $data->nama_belakang = $nama_belakang;
@@ -192,8 +195,10 @@ class PegawaiController extends Controller
 
             if($simpan)
             {
-                return redirect('/pegawai')->with('notifikasi_success','Data '.$nama_lengkap.' sudah diinput!' );
-                // return redirect()->route('pegawai.index');
+                Alert::success('Input Data Pegawai Berhasil', 'Data '.$nama_lengkap.' sudah berhasil diinput!');
+
+                // return redirect('/pegawai')->with('notifikasi_success','Data '.$nama_lengkap.' sudah diinput!' );
+                return redirect()->intended('/pegawai');
             }
         }
 
@@ -436,7 +441,10 @@ class PegawaiController extends Controller
 
             $data_pegawai->update();
         }
-        return redirect()->route('pegawai.show', Crypt::encryptString($data_pegawai->id) )->with('notifikasi_success','Data '.$data_pegawai->nama_lengkap().' sudah diupdate!' );
+
+        Alert::success('Update Berhasil', 'Data '.$data_pegawai->nama_lengkap().' sudah diupdate!');
+
+        return redirect()->route('pegawai.show', Crypt::encryptString($data_pegawai->id));
     }
 
     /**
@@ -449,7 +457,11 @@ class PegawaiController extends Controller
     {
         $id_pegawai = Crypt::decryptString($id);
         $data_pegawai = Pegawai::findOrFail($id_pegawai);
+        $nama_lengkap = $data_pegawai->nama_lengkap();
         $data_pegawai->delete();
-        return redirect()->route('pegawai.index')->with('notifikasi_delete','Data sudah dihapus!' );
+
+        Alert::success('Hapus Data Pegawai Berhasil', 'Data '.$nama_lengkap.' sudah berhasil dihapus!');
+
+        return redirect()->intended('/pegawai');
     }
 }

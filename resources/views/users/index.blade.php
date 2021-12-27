@@ -41,20 +41,6 @@ active
           <h4>Data User</h4>
         </div> --}}
 
-        {{-- Alert Notification --}}
-
-        @if(session('notifikasi_sukses'))
-          <div class="alert alert-success alert-dismissible m-3 show fade" role="alert">
-            <div class="alert-body">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-              <i class="fas fa-check"></i>
-              {{session('notifikasi_sukses')}}
-            </div>
-          </div>
-        @endif
-
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover" id="table-1" width="100%" cellspacing="0">
@@ -126,11 +112,15 @@ active
                                 <div class="row mt-2">
                                 {{-- <a href="{{ route('user.edit', Crypt::encryptString($user->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a> --}}
 
-                                <form action="{{ route('user.destroy',  Crypt::encryptString($user->id)) }}" method="POST">
+                                {{-- <form action="{{ route('user.destroy',  Crypt::encryptString($user->id)) }}" method="POST">
                                     {{ csrf_field() }}
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                </form>
+                                </form> --}}
+
+                                <button class="btn btn-md btn-danger m-2 delete" id_user="{{Crypt::encryptString($user->id)}}" nama_lengkap="{{$user->nama_lengkap()}}">
+                                    <i class="fas fa-trash mr-2"></i> Hapus
+                                </button>
 
                                 </div>
                             </td>
@@ -146,5 +136,25 @@ active
       </div>
     </div>
 </section>
+
+<script>
+        $('.delete').click(function() {
+        var id = $(this).attr('id_user');
+        var nama_lengkap = $(this).attr('nama_lengkap');
+        swal({
+            title: 'Ingin menghapus data '+nama_lengkap+' ??',
+            text: 'Langkah ini akan menghapus data '+nama_lengkap+' secara permanen.',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+            if (willDelete) {
+                window.location = "/user/"+id+"/destroy";
+            }
+            });
+    });
+
+</script>
 
 @endsection

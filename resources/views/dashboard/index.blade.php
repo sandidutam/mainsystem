@@ -116,6 +116,78 @@ active
             @endif
         </div>
 
+        {{-- Informasi Jumlah Pegawai --}}
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-success card-statistic-1">
+                    <div class="card-icon bg-success text-white">
+                        <h2 class="mt-3">
+                            {{$jml_s1}} <span><h6>Orang</h6></span>
+                        </h2>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+
+                        </div>
+                        <div class="card-body">
+                            Jumlah Pegawai Sektor 1
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-success card-statistic-1">
+                    <div class="card-icon bg-success text-white">
+                        <h2 class="mt-3">
+                            {{$jml_s2}} <span><h6>Orang</h6></span>
+                        </h2>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+
+                        </div>
+                        <div class="card-body">
+                            Jumlah Pegawai Sektor 2
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-success card-statistic-1">
+                    <div class="card-icon bg-success text-white">
+                        <h2 class="mt-3">
+                            {{$jml_s3}} <span><h6>Orang</h6></span>
+                        </h2>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+
+                        </div>
+                        <div class="card-body">
+                            Jumlah Pegawai Sektor 3
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-success card-statistic-1">
+                    <div class="card-icon bg-success text-white">
+                        <h2 class="mt-3">
+                            {{$jml_s4}} <span><h6>Orang</h6></span>
+                        </h2>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+
+                        </div>
+                        <div class="card-body">
+                            Jumlah Pegawai Sektor 4
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Kartu Informasi Absen Hari Ini --}}
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
@@ -242,8 +314,13 @@ active
         }
     },
     tooltip: {
+        headerFormat: '<span style="font-size:10px">Bulan {point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>Rp {point.y:.f},00</b></td></tr>',
+        footerFormat: '</table>',
         crosshairs: true,
-        shared: true
+        shared: true,
+        useHTML: true
     },
     plotOptions: {
         spline: {
@@ -341,4 +418,12 @@ active
 
 
 </script>
+@endsection
+
+@section('footer')
+
+    <script>
+        swal("Good job!", "You clicked the button!", "success");
+    </script>
+
 @endsection

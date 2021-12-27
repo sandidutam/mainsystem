@@ -39,6 +39,8 @@ $("#swal-6").click(function() {
     });
 });
 
+
+
 $("#swal-7").click(function() {
   swal({
     title: 'What is your name?',

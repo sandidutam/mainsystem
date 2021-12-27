@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Neraca;
 use App\Models\Pegawai;
 use App\Models\Presensi;
@@ -147,6 +148,7 @@ class DashboardController extends Controller
         ];
 
         $tahun = Carbon::now()->format('Y');
+        $tahunkemarin = Carbon::now()->subYears(1)->format('Y');
 
         $d1 = Neraca::where('bulan', '1')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
         $d2 = Neraca::where('bulan', '2')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
@@ -174,9 +176,12 @@ class DashboardController extends Controller
         $k11 = Neraca::where('bulan', '11')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
         $k12 = Neraca::where('bulan', '12')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
 
+        $lastyeartotalkredit = Neraca::where('tahun', $tahunkemarin)->whereNotNull('kredit')->sum('kredit');
+        $lastyeartotaldebit = Neraca::where('tahun', $tahunkemarin)->whereNotNull('debit')->sum('debit');
+        $lastyearbalance = $lastyeartotaldebit - $lastyeartotalkredit;
 
         $databalance = [
-            $balance1 = $d1 - $k1 ,
+            $balance1 = $lastyearbalance + $d1 - $k1 ,
             $balance2 = $balance1 + $d2 - $k2 ,
             $balance3 = $balance2 + $d3 - $k3 ,
             $balance4 = $balance3 + $d4 - $k4 ,
@@ -261,6 +266,12 @@ class DashboardController extends Controller
         $izin = $jml_cuti+$jml_izin+$jml_sakit;
         $belum_hadir = $jml_pegawai-$jml_hadir-$jml_bolos-$jml_cuti-$jml_izin-$jml_sakit;
 
+        $jml_s1 = Pegawai::where('sektor_area','1')->count();
+        $jml_s2 = Pegawai::where('sektor_area','2')->count();
+        $jml_s3 = Pegawai::where('sektor_area','3')->count();
+        $jml_s4 = Pegawai::where('sektor_area','4')->count();
+
+
         return view('dashboard.index', compact ('categories',
                                                 'data1',
                                                 'data2',
@@ -279,6 +290,10 @@ class DashboardController extends Controller
                                                 'jml_hadir',
                                                 'jml_bolos',
                                                 'izin',
+                                                'jml_s1',
+                                                'jml_s2',
+                                                'jml_s3',
+                                                'jml_s4'
                                                 ));
     }
 }

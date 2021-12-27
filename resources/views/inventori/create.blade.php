@@ -134,7 +134,7 @@ active
 
                                 <div class="form-group {{$errors->has('harga') ? 'has-error' : ''}} ">
                                     <label for="harga" class="form-label"> Harga : </label>
-                                    <input type="number" class="form-control" name="harga" id="harga" placeholder="Isi Harga Barang" value="{{old('harga')}}">
+                                    <input type="text" class="form-control" name="harga" id="harga" placeholder="Isi Harga Barang" value="{{old('harga')}}" autocomplete="off">
                                     @if($errors->has('harga'))
                                         <span class="help-block text-danger">{{$errors->first('harga')}}</span>
                                     @endif

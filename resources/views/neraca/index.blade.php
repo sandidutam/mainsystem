@@ -259,12 +259,14 @@ active
                                             <td>
                                                 <div class="row mt-2">
                                                     <a href="{{ route('neraca.edit', Crypt::encryptString($item->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a>
-
-                                                    <form action="{{ route('neraca.destroy', Crypt::encryptString($item->id)) }}" method="POST">
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_neraca="{{$item->id}}" nama_akun="{{$item->akun}}" nomor_akun="{{$item->nomor_akun}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
+                                                    {{-- <form action="{{ route('neraca.destroy', Crypt::encryptString($item->id)) }}" method="POST">
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="_method" value="DELETE">
                                                         <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    </form> --}}
                                                 </div>
                                             </td>
                                             @endif
@@ -316,12 +318,9 @@ active
                                             <td>
                                                 <div class="row mt-2">
                                                     <a href="{{ route('neraca.edit', Crypt::encryptString($item->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a>
-
-                                                    <form action="{{ route('neraca.destroy', Crypt::encryptString($item->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_neraca="{{$item->id}}" nama_akun="{{$item->akun}}" nomor_akun="{{$item->nomor_akun}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -381,11 +380,14 @@ active
                                         <td>
                                             <div class="row">
                                             <a href="{{ route('neraca.edit',Crypt::encryptString($item->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-1"></i></a>
-                                            <form action="{{ route('neraca.destroy', $item->id) }}" method="POST">
+                                            <button class="btn btn-md btn-danger m-2 delete" id_neraca="{{$item->id}}" nama_akun="{{$item->akun}}" nomor_akun="{{$item->nomor_akun}}">
+                                                <i class="fas fa-trash mr-2"></i> Hapus
+                                            </button>
+                                            {{-- <form action="{{ route('neraca.destroy', $item->id) }}" method="POST">
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-1"></i></button>
-                                            </form>
+                                            </form> --}}
                                             </div>
                                         </td>
                                         @endif
@@ -410,69 +412,93 @@ active
 @endsection
 
 @section('footer')
+
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
-<script>Highcharts.chart('neracaChart', {
-    chart: {
-        type: 'spline'
-    },
-    title: {
-        text: 'Grafik Saldo Bulanan'
-    },
-    subtitle: {
-        text: 'Data Tahun 2021'
-    },
-    xAxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    },
-    yAxis: {
+<script>
+    Highcharts.chart('neracaChart', {
+        chart: {
+            type: 'spline'
+        },
         title: {
-            text: 'Jumlah (Dalam Rupiah)'
+            text: 'Grafik Saldo Bulanan'
         },
-        labels: {
-            formatter: function () {
-                return 'Rp' + this.value ;
+        subtitle: {
+            text: 'Data Tahun 2021'
+        },
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
+            title: {
+                text: 'Jumlah (Dalam Rupiah)'
+            },
+            labels: {
+                formatter: function () {
+                    return 'Rp' + this.value ;
+                }
             }
-        }
-    },
-    tooltip: {
-        crosshairs: true,
-        shared: true
-    },
-    plotOptions: {
-        spline: {
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">Bulan {point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>Rp {point.y:.f},00</b></td></tr>',
+            footerFormat: '</table>',
+            crosshairs: true,
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            spline: {
+                marker: {
+                    radius: 4,
+                    lineColor: '#666666',
+                    lineWidth: 1
+                }
+            }
+        },
+        series: [{
+            name: 'Saldo',
+            color: '#6777EF',
             marker: {
-                radius: 4,
-                lineColor: '#666666',
-                lineWidth: 1
+                symbol: 'square'
+            },
+            data: {!! json_encode($databalance) !!}
+
+        }, {
+            name: 'Debit',
+            color: '#47C363',
+            marker: {
+                symbol: 'diamond'
+            },
+            data: {!! json_encode($datadebit) !!}
+        }, {
+            name: 'Kredit',
+            color: '#FC544B',
+            marker: {
+                symbol: 'diamond'
+            },
+            data: {!! json_encode($datakredit) !!}
+        }]
+    });
+
+    $('.delete').click(function() {
+        var id = $(this).attr('id_neraca');
+        var nama_akun = $(this).attr('nama_akun');
+        var nomor_akun = $(this).attr('nomor_akun');
+        swal({
+            title: 'Ingin menghapus data '+nama_akun+' ??',
+            text: 'Langkah ini akan menghapus data transaksi '+nama_akun+' dengan nomor transaksi '+nomor_akun+' secara permanen.',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+            if (willDelete) {
+                window.location = "/neraca/"+id+"/destroy";
             }
-        }
-    },
-    series: [{
-        name: 'Saldo',
-        color: '#6777EF',
-        marker: {
-            symbol: 'square'
-        },
-        data: {!! json_encode($databalance) !!}
-
-    }, {
-        name: 'Debit',
-        color: '#47C363',
-        marker: {
-            symbol: 'diamond'
-        },
-        data: {!! json_encode($datadebit) !!}
-    }, {
-        name: 'Kredit',
-        color: '#FC544B',
-        marker: {
-            symbol: 'diamond'
-        },
-        data: {!! json_encode($datakredit) !!}
-    }]
-});
-
+            });
+    });
 
 </script>
 

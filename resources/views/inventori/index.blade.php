@@ -119,12 +119,15 @@ active
                         @if (auth()->user()->role == "SuperAdmin" | auth()->user()->role == "Admin")
                         <td>
                             <div class="row">
-                              <a href="{{ route('inventori.edit', Crypt::encryptString($barang->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-1"></i> Update</a>
-                              <form action="{{ route('inventori.destroy', Crypt::encryptString($barang->id)) }}" method="POST">
-                                  {{ csrf_field() }}
-                                  <input type="hidden" name="_method" value="DELETE">
-                                  <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-1"></i> Hapus</button>
-                              </form>
+                                <a href="{{ route('inventori.edit', Crypt::encryptString($barang->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-1"></i> Update</a>
+                                <button class="btn btn-md btn-danger m-2 delete" id_barang="{{Crypt::encryptString($barang->id)}}" nama="{{$barang->nama}}">
+                                    <i class="fas fa-trash mr-2"></i> Hapus
+                                </button>
+                                {{-- <form action="{{ route('inventori.destroy', Crypt::encryptString($barang->id)) }}" method="POST">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-1"></i> Hapus</button>
+                                </form> --}}
                             </div>
                         </td>
                         @endif
@@ -142,5 +145,24 @@ active
         </div>
     </div>
 </section>
+
+<script>
+     $('.delete').click(function() {
+        var id = $(this).attr('id_barang');
+        var nama = $(this).attr('nama');
+        swal({
+            title: 'Ingin menghapus data '+nama+' ??',
+            text: 'Langkah ini akan menghapus data '+nama+' secara permanen.',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+            if (willDelete) {
+                window.location = "/inventori/"+id+"/destroy";
+            }
+            });
+    });
+</script>
 
 @endsection

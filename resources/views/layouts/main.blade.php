@@ -46,6 +46,7 @@
 
       <!-- Main Content -->
       <div class="main-content">
+        @include('sweetalert::alert')
         @yield('content')
       </div>
       @include('layouts.footer')
@@ -73,11 +74,14 @@
   <!-- Template JS File -->
   <script src="{{asset('stisla-master/assets/js/scripts.js')}}"></script>
   <script src="{{asset('stisla-master/assets/js/custom.js')}}"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
   <!-- Page Specific JS File -->
   <script src="{{asset('stisla-master/assets/js/page/bootstrap-modal.js')}}"></script>
   <script src="{{asset('stisla-master/assets/js/page/modules-datatables.js')}}"></script>
   <script src="{{asset('stisla-master/assets/js/page/components-user.js')}}"></script>
+  <script src="{{asset('stisla-master/assets/js/page/modules-sweetalert.js')}}"></script>
+
 
   @yield('footer')
 

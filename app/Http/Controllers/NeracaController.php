@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Faker\Factory as Faker;
 use App\Models\Neraca;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\NeracaExport;
 use PDF;
+use Alert;
 
 class NeracaController extends Controller
 {
@@ -43,6 +45,7 @@ class NeracaController extends Controller
         $balance = $sumdebit - $sumkredit;
 
         $tahun = Carbon::now()->format('Y');
+        $tahunkemarin = Carbon::now()->subYears(1)->format('Y');
 
         $d1 = Neraca::where('bulan', '1')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
         $d2 = Neraca::where('bulan', '2')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
@@ -70,9 +73,12 @@ class NeracaController extends Controller
         $k11 = Neraca::where('bulan', '11')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
         $k12 = Neraca::where('bulan', '12')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
 
-        
+        $lastyeartotalkredit = Neraca::where('tahun', $tahunkemarin)->whereNotNull('kredit')->sum('kredit');
+        $lastyeartotaldebit = Neraca::where('tahun', $tahunkemarin)->whereNotNull('debit')->sum('debit');
+        $lastyearbalance = $lastyeartotaldebit - $lastyeartotalkredit;
+
         $databalance = [
-            $balance1 = $d1 - $k1 ,
+            $balance1 = $lastyearbalance + $d1 - $k1 ,
             $balance2 = $balance1 + $d2 - $k2 ,
             $balance3 = $balance2 + $d3 - $k3 ,
             $balance4 = $balance3 + $d4 - $k4 ,
@@ -226,7 +232,6 @@ class NeracaController extends Controller
 
         }
 
-
         $data = new Neraca();
         $data->nomor_akun = $no_trans;
         $data->akun = $request->transaksi;
@@ -252,7 +257,9 @@ class NeracaController extends Controller
 
         if($simpan)
         {
-            return redirect()->route('neraca.index')->with('notifikasi_sukses', 'Transaksi baru sudah diinput ke neraca!');
+            Alert::success('Input Data Transaksi Berhasil', 'Data transaksi '.$data->akun.' dengan nomor transaksi '.$data->nomor_akun.' sudah berhasil diinput!');
+
+            return redirect()->intended('/neraca');
         }
     }
 
@@ -272,12 +279,13 @@ class NeracaController extends Controller
          // Hasil Input dimasukkan ke database
 
 
-        $tgl_transaksi = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y-m-d');
+        // $tgl_transaksi = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y-m-d');
 
         $neraca->akun = $request->akun;
         $neraca->debit = $request->debit;
         $neraca->kredit = $request->kredit;
-        $neraca->tanggal = $tgl_transaksi;
+        // $neraca->tanggal = $tgl_transaksi;
+        $simpan = $neraca->update();
 
         if($request->hasFile('foto_bukti')) {
             $request->file('foto_bukti')->move('images/transaksi/',$request->file('foto_bukti')->getClientOriginalName());
@@ -291,15 +299,20 @@ class NeracaController extends Controller
             $simpan = $neraca->update();
         }
 
+        Alert::success('Update Data Transaksi Berhasil', 'Data transaksi '.$neraca->akun.' dengan nomor transaksi '.$neraca->nomor_akun.' sudah berhasil di update!');
 
-        return redirect()->route('neraca.index')->with('notifikasi_sukses', 'Transaksi '.$neraca->akun.' sudah diupdate!');
+        return redirect()->intended('/neraca');
     }
 
     public function destroy($id)
     {
         $neraca = Neraca::findOrFail($id);
+
         $neraca->delete();
-        return redirect()->route('neraca.index')->with('notifikasi_sukses', 'Data sudah dihapus!');
+
+        Alert::success('Data Transaksi Berhasil Dihapus!', 'Data transaksi '.$neraca->akun.' dengan nomor transaksi '.$neraca->nomor_akun.' sudah berhasil di hapus!');
+
+        return redirect()->intended('/neraca');
     }
 
     public function exportExcel()
@@ -333,11 +346,13 @@ class NeracaController extends Controller
 
         foreach ( $data as $idx ) {
             if ( $idx->akun ==  'Transaksi Debit' ) {
+                    $idx->nomor_akun = 'TR/DBIT/'.$idx->tahun.'/'.$idx->bulan.'/'.random_int(1000, 9999);
                     $idx->debit = random_int(10000, 999999999);
                     $idx->created_at = $idx->tanggal;
                     $idx->updated_at = $idx->tanggal;
                     $idx->update();
             } elseif ( $idx->akun == 'Transaksi Kredit' ) {
+                    $idx->nomor_akun = 'TR/KDIT/'.$idx->tahun.'/'.$idx->bulan.'/'.random_int(1000, 9999);
                     $idx->kredit = random_int(10000, 99999999);
                     $idx->created_at = $idx->tanggal;
                     $idx->updated_at = $idx->tanggal;

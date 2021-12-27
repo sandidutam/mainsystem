@@ -150,7 +150,7 @@ active
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <div class="form-group {{$errors->has('password') ? 'has-error' : ''}}">
                                         <label for="password" class="form-label"> Password : </label>
-                                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="{{old('password')}}">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="{{old('password')}}" autocomplete="off">
                                         @if($errors->has('password'))
                                             <span class="help-block text-danger">{{$errors->first('password')}}</span>
                                         @endif
@@ -160,7 +160,7 @@ active
 
                             <div class="form-group {{$errors->has('password_confirmation') ? 'has-error' : ''}}">
                                 <label for="password_confirmation" class="form-label"> Password Confirmation: </label>
-                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Pasword" value="{{old('password_confirmation')}}">
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Pasword" value="{{old('password_confirmation')}}" autocomplete="off">
                                 @if($errors->has('password_confirmation'))
                                     <span class="help-block text-danger">{{$errors->first('password_confirmation')}}</span>
                                 @endif

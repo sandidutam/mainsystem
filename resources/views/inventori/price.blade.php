@@ -98,7 +98,7 @@ active
                                               Rp
                                             </div>
                                           </div>
-                                        <input type="text" class="form-control" name="harga" id="harga" value="{{$harga}}">
+                                        <input type="text" class="form-control" name="harga" id="harga" value="{{$barang->harga}}">
                                     </div>
                                     @if($errors->has('harga'))
                                         <span class="help-block text-danger">{{$errors->first('harga')}}</span>

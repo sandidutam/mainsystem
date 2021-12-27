@@ -21,6 +21,7 @@ class PegawaiSeeder extends Seeder
 
     	      // insert data ke table pegawai menggunakan Faker
     		DB::table('pegawai')->insert([
+                'status' => 'Belum Hadir',
                 'nomor_pegawai' => 'PGW-'.random_int(100000, 999999),
     			'nama_depan' => $faker->firstName,
     			'nama_belakang' => $faker->lastName,

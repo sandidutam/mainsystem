@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use App\Models\Pegawai;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -107,8 +108,9 @@ class UserController extends Controller
             $data_user->save();
         }
 
-        // dd($data_user);
-        return redirect()->route('user.index')->with('notifikasi_create','Data '.$nama_lengkap.' sudah diinput!' );
+        Alert::success('Input Data User Berhasil', 'Data '.$nama_lengkap.' sudah berhasil diinput!');
+
+        return redirect()->intended('/user');
     }
 
     public function show($id)
@@ -222,7 +224,7 @@ class UserController extends Controller
             'jenis_kelamin' => 'required',
             'jabatan' => 'required',
             'role' => 'required',
-            'foto_user' => 'required'
+            // 'foto_user' => 'required'
         ]);
 
         if($validator->fails()) {
@@ -263,6 +265,8 @@ class UserController extends Controller
             $data_user->update();
         }
 
+        Alert::success('Update Berhasil', 'Data '.$data_user->nama_lengkap().' sudah diupdate!');
+
         return redirect()->route('user.show',  Crypt::encryptString($data_user->id))->with('notifikasi_update','Data '.$data_user->nama_lengkap().' sudah diupdate!' );
     }
 
@@ -277,9 +281,12 @@ class UserController extends Controller
         $id_user = Crypt::decryptString($id);
 
         $data_user = User::find($id_user);
+        $nama_lengkap = $data_user->nama_lengkap();
+
+        Alert::success('Hapus Data User Berhasil', 'Data '.$nama_lengkap.' sudah berhasil dihapus!');
 
         $data_user->delete();
-        return redirect()->route('user.index')->with('notifikasi_delete','Data sudah dihapus!' );
+        return redirect()->intended('/user');
     }
 
 }

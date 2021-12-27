@@ -151,32 +151,6 @@ active
                 </ul>
             </div> --}}
 
-          {{-- Alert Notification --}}
-
-            @if(session('notifikasi_success'))
-                <div class="alert alert-success alert-dismissible m-3 show fade" role="alert">
-                <div class="alert-body">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <i class="fas fa-check"></i>
-                    {{session('notifikasi_success')}}
-                </div>
-                </div>
-            @endif
-
-            @if(session('notifikasi_delete'))
-                <div class="alert alert-success alert-dismissible m-3 show fade" role="alert">
-                <div class="alert-body">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <i class="fas fa-check"></i>
-                    {{session('notifikasi_delete')}}
-                </div>
-                </div>
-            @endif
-
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -227,15 +201,6 @@ active
                             <tbody>
                                 @forelse($s1 as $pegawai)
                                     <tr>
-                                        <div hidden>
-                                            {{$today = \Carbon\Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d')}}
-                                            {{$check_jam = $pegawai->presensi->pluck('jam_masuk')->implode(', ')}}
-                                            {{$check_tanggal = $pegawai->presensi->pluck('tanggal')->implode(', ')}}
-                                            {{$check_catatan = $pegawai->presensi->pluck('catatan_masuk')->implode(', ')}}
-                                            {{$check_catatan_keluar = $pegawai->presensi->pluck('catatan_keluar')->implode(', ')}}
-                                            {{$check_keterangan = $pegawai->presensi->pluck('keterangan')->implode(', ')}}
-                                        </div>
-
                                         @if ( $pegawai->status == "Belum Hadir" )
                                             <td>
                                                 <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
@@ -279,15 +244,17 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
+                                                    {{-- <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                        <button type="submit" class="btn btn-md btn-danger m-2" onclick="return confirm('Yakin ingin dihapus?')"><i class="fas fa-trash mr-2"></i> Hapus</button>
+                                                    </form> --}}
                                                 </div>
                                             </td>
                                             @endif
-
                                         @elseif ( $pegawai->status == "Sudah Hadir" )
                                             <td>
                                                 <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
@@ -331,11 +298,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -394,11 +359,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -446,17 +409,14 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
 
                                         @endif
-
                                     </tr>
                                     @empty
                                 @endforelse
@@ -484,15 +444,6 @@ active
                             <tbody>
                                 @forelse($s2 as $pegawai)
                                     <tr>
-                                        <div hidden>
-                                            {{$today = \Carbon\Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d')}}
-                                            {{$check_jam = $pegawai->presensi->pluck('jam_masuk')->implode(', ')}}
-                                            {{$check_tanggal = $pegawai->presensi->pluck('tanggal')->implode(', ')}}
-                                            {{$check_catatan = $pegawai->presensi->pluck('catatan_masuk')->implode(', ')}}
-                                            {{$check_catatan_keluar = $pegawai->presensi->pluck('catatan_keluar')->implode(', ')}}
-                                            {{$check_keterangan = $pegawai->presensi->pluck('keterangan')->implode(', ')}}
-                                        </div>
-
                                         @if ( $pegawai->status == "Belum Hadir" )
                                             <td>
                                                 <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
@@ -536,15 +487,17 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
+                                                    {{-- <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                        <button type="submit" class="btn btn-md btn-danger m-2" onclick="return confirm('Yakin ingin dihapus?')"><i class="fas fa-trash mr-2"></i> Hapus</button>
+                                                    </form> --}}
                                                 </div>
                                             </td>
                                             @endif
-
                                         @elseif ( $pegawai->status == "Sudah Hadir" )
                                             <td>
                                                 <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
@@ -588,11 +541,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -651,11 +602,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -703,14 +652,13 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
+
                                         @endif
                                     </tr>
                                     @empty
@@ -782,15 +730,17 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
+                                                    {{-- <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                        <button type="submit" class="btn btn-md btn-danger m-2" onclick="return confirm('Yakin ingin dihapus?')"><i class="fas fa-trash mr-2"></i> Hapus</button>
+                                                    </form> --}}
                                                 </div>
                                             </td>
                                             @endif
-
                                         @elseif ( $pegawai->status == "Sudah Hadir" )
                                             <td>
                                                 <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
@@ -834,11 +784,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -897,11 +845,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -949,11 +895,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -987,15 +931,6 @@ active
                             <tbody>
                                 @forelse($s4 as $pegawai)
                                     <tr>
-                                        <div hidden>
-                                            {{$today = \Carbon\Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d')}}
-                                            {{$check_jam = $pegawai->presensi->pluck('jam_masuk')->implode(', ')}}
-                                            {{$check_tanggal = $pegawai->presensi->pluck('tanggal')->implode(', ')}}
-                                            {{$check_catatan = $pegawai->presensi->pluck('catatan_masuk')->implode(', ')}}
-                                            {{$check_catatan_keluar = $pegawai->presensi->pluck('catatan_keluar')->implode(', ')}}
-                                            {{$check_keterangan = $pegawai->presensi->pluck('keterangan')->implode(', ')}}
-                                        </div>
-
                                         @if ( $pegawai->status == "Belum Hadir" )
                                             <td>
                                                 <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
@@ -1039,15 +974,17 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
+                                                    {{-- <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                        <button type="submit" class="btn btn-md btn-danger m-2" onclick="return confirm('Yakin ingin dihapus?')"><i class="fas fa-trash mr-2"></i> Hapus</button>
+                                                    </form> --}}
                                                 </div>
                                             </td>
                                             @endif
-
                                         @elseif ( $pegawai->status == "Sudah Hadir" )
                                             <td>
                                                 <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
@@ -1091,11 +1028,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -1154,11 +1089,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -1206,11 +1139,9 @@ active
                                             @if(auth()->user()->role == "SuperAdmin")
                                             <td>
                                                 <div class="row mt-2">
-                                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                                        {{ csrf_field() }}
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                                    </form>
+                                                    <button class="btn btn-md btn-danger m-2 delete" id_pegawai="{{Crypt::encryptString($pegawai->id)}}" nama_lengkap="{{$pegawai->nama_lengkap()}}">
+                                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                             @endif
@@ -1235,6 +1166,27 @@ active
 
 
 <script>
+
+    $('.delete').click(function() {
+        var id = $(this).attr('id_pegawai');
+        var nama_lengkap = $(this).attr('nama_lengkap');
+        swal({
+            title: 'Ingin menghapus data '+nama_lengkap+' ??',
+            text: 'Langkah ini akan menghapus data '+nama_lengkap+' secara permanen.',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+            if (willDelete) {
+                window.location = "/pegawai/"+id+"/destroy";
+            }
+            });
+    });
+
+
+
+
     // window.onload = function() {
     // document.getElementById("clearButton1").addEventListener("click",clear1);
     // }
