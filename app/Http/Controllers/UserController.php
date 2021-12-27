@@ -209,11 +209,12 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id_user = Crypt::decryptString($id);
+        // $id_user = Crypt::decryptString($id);
 
-        $data_user = User::find($id_user);
+        $data_user = User::find($id);
 
         $validator = Validator::make($request->all(), [
+            'nomor_pegawai' => 'required',
             'email' => 'required|email',
             'nama_depan' => 'required|min:2|max:25',
             'nama_belakang' => 'required|min:2|max:25',
@@ -225,7 +226,7 @@ class UserController extends Controller
         ]);
 
         if($validator->fails()) {
-            return redirect()->route('user.edit',  Crypt::encryptString($data_user->id))
+            return redirect()->route('user.show',  Crypt::encryptString($data_user->id))
                                 ->withErrors($validator)
                                 ->withInput();
         }
@@ -262,7 +263,7 @@ class UserController extends Controller
             $data_user->update();
         }
 
-        return redirect()->route('user.index')->with('notifikasi_update','Data '.$data_user->nama_lengkap().' sudah diupdate!' );
+        return redirect()->route('user.show',  Crypt::encryptString($data_user->id))->with('notifikasi_update','Data '.$data_user->nama_lengkap().' sudah diupdate!' );
     }
 
     /**

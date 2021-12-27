@@ -17,6 +17,21 @@ class NeracaController extends Controller
     public function index()
     {
         $neraca = Neraca::all();
+        $riwayat = Neraca::orderBy('tanggal', 'DESC')->get();
+        $sumneraca = Neraca::all()->count();
+
+        $data_neraca = Neraca::orderBy('tanggal','DESC')->get()->groupBy(function($item) {
+            return $item->tanggal;
+        });
+
+        $debit = DB::table('neraca')
+                        ->whereNotNull('debit')
+                        ->get();
+
+        $kredit = DB::table('neraca')
+                        ->whereNotNull('kredit')
+                        ->get();
+
         $sumdebit = DB::table('neraca')
                         ->whereNotNull('debit')
                         ->sum('debit');
@@ -27,40 +42,95 @@ class NeracaController extends Controller
 
         $balance = $sumdebit - $sumkredit;
 
+        $tahun = Carbon::now()->format('Y');
+
+        $d1 = Neraca::where('bulan', '1')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d2 = Neraca::where('bulan', '2')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d3 = Neraca::where('bulan', '3')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d4 = Neraca::where('bulan', '4')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d5 = Neraca::where('bulan', '5')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d6 = Neraca::where('bulan', '6')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d7 = Neraca::where('bulan', '7')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d8 = Neraca::where('bulan', '8')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d9 = Neraca::where('bulan', '9')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d10 = Neraca::where('bulan', '10')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d11 = Neraca::where('bulan', '11')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $d12 = Neraca::where('bulan', '12')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+
+        $k1 = Neraca::where('bulan', '1')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k2 = Neraca::where('bulan', '2')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k3 = Neraca::where('bulan', '3')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k4 = Neraca::where('bulan', '4')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k5 = Neraca::where('bulan', '5')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k6 = Neraca::where('bulan', '6')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k7 = Neraca::where('bulan', '7')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k8 = Neraca::where('bulan', '8')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k9 = Neraca::where('bulan', '9')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k10 = Neraca::where('bulan', '10')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k11 = Neraca::where('bulan', '11')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $k12 = Neraca::where('bulan', '12')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+
+        
+        $databalance = [
+            $balance1 = $d1 - $k1 ,
+            $balance2 = $balance1 + $d2 - $k2 ,
+            $balance3 = $balance2 + $d3 - $k3 ,
+            $balance4 = $balance3 + $d4 - $k4 ,
+            $balance5 = $balance4 + $d5 - $k5 ,
+            $balance6 = $balance5 + $d6 - $k6 ,
+            $balance7 = $balance6 + $d7 - $k7 ,
+            $balance8 = $balance7 + $d8 - $k8 ,
+            $balance9 = $balance8 + $d9 - $k9 ,
+            $balance10 = $balance9 + $d10 - $k10 ,
+            $balance11 = $balance10 + $d11 - $k11 ,
+            $balance12 = $balance11 + $d12 - $k12
+        ];
+
+        $datadebit = [
+            $d1,
+            $d2,
+            $d3,
+            $d4,
+            $d5,
+            $d6,
+            $d7,
+            $d8,
+            $d9,
+            $d10,
+            $d11,
+            $d12
+        ];
+
+        $datakredit = [
+            $k1,
+            $k2,
+            $k3,
+            $k4,
+            $k5,
+            $k6,
+            $k7,
+            $k8,
+            $k9,
+            $k10,
+            $k11,
+            $k12
+        ];
+
         $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
-        return view('neraca.index', compact('neraca','today','sumdebit','sumkredit','balance'));
-    }
-
-    public function debit()
-    {
-        $neraca = DB::table('neraca')
-                        ->whereNotNull('debit')
-                        ->get();
-
-        $sum = DB::table('neraca')
-                        ->whereNotNull('debit')
-                        ->sum('debit');
-
-        // return $suma;
-
-        $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
-        return view('neraca.debit', compact('neraca','today','sum'));
-    }
-
-    public function kredit()
-    {
-        $neraca = DB::table('neraca')
-                        ->whereNotNull('kredit')
-                        ->get();
-
-        $sum = DB::table('neraca')
-                        ->whereNotNull('kredit')
-                        ->sum('kredit');
-
-        // return $sum;
-
-        $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
-        return view('neraca.kredit', compact('neraca','today','sum'));
+        return view('neraca.index', compact('neraca',
+                                            'today',
+                                            'debit',
+                                            'kredit',
+                                            'sumdebit',
+                                            'sumkredit',
+                                            'balance',
+                                            'data_neraca',
+                                            'riwayat',
+                                            'sumneraca',
+                                            'databalance',
+                                            'datadebit',
+                                            'datakredit'
+                                            ));
     }
 
     public function show($id)
@@ -164,6 +234,8 @@ class NeracaController extends Controller
         $data->debit = $request->debit;
         $data->kredit = $request->kredit;
         $data->tanggal = $tgl_transaksi;
+        $data->bulan = $bulan;
+        $data->tahun = $tahun;
         $simpan = $data->save();
 
         if($request->hasFile('foto_bukti')) {
@@ -238,7 +310,7 @@ class NeracaController extends Controller
 
     public function exportPdf()
     {
-        $neraca = Neraca::all();
+        $neraca = Neraca::orderBy('tanggal')->get();
         $sumdebit = DB::table('neraca')
                         ->whereNotNull('debit')
                         ->sum('debit');
@@ -252,4 +324,27 @@ class NeracaController extends Controller
         return $pdf->download('neraca.pdf');
     }
 
+    public function updateAkun(Request $request)
+    {
+        $check_debit = DB::table('neraca')->where('akun', 'Transaksi Debit')->get();
+        $check_kredit = DB::table('neraca')->where('akun', 'Transaksi Kredit')->get();
+
+        $data = Neraca::all();
+
+        foreach ( $data as $idx ) {
+            if ( $idx->akun ==  'Transaksi Debit' ) {
+                    $idx->debit = random_int(10000, 999999999);
+                    $idx->created_at = $idx->tanggal;
+                    $idx->updated_at = $idx->tanggal;
+                    $idx->update();
+            } elseif ( $idx->akun == 'Transaksi Kredit' ) {
+                    $idx->kredit = random_int(10000, 99999999);
+                    $idx->created_at = $idx->tanggal;
+                    $idx->updated_at = $idx->tanggal;
+                    $idx->update();
+            }
+        }
+
+        return redirect()->intended('/neraca');
+    }
 }

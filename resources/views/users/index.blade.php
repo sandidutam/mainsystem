@@ -71,34 +71,34 @@ active
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($data_user as $pegawai)
+                    @forelse($data_user as $user)
                     <tr>
                         <td>
-                            <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                <img class="img" style="margin-right: 0px; margin-left: 60px; height: 75px; width: 75px; border-radius: 100%; border: 3px solid #838383; object-fit: cover;" src="{{$pegawai->getFotoUser()}}" alt="">
+                            <a href="{{ route('user.show', Crypt::encryptString($user->id)) }}">
+                                <img class="img" style="margin-right: 0px; margin-left: 60px; height: 75px; width: 75px; border-radius: 100%; border: 3px solid #6777EF; object-fit: cover;" src="{{$user->getFotoUser()}}" alt="">
                             </a>
                         </td>
                         <td>
                             <div class="mt-2">
                                 <div class="row">
-                                    <a style="color: black;" href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
+                                    <a style="color: black;" href="{{ route('user.show', Crypt::encryptString($user->id)) }}">
                                         <h4>
-                                            {{$pegawai->nama_lengkap()}}
+                                            {{$user->nama_lengkap()}}
                                         </h4>
                                     </a>
                                 </div>
-                                <div class="row">
+                                {{-- <div class="row">
                                     <h6>
                                         <div class="text-muted text-small font-600-bold"><i class="fas fa-circle"></i> Belum Hadir</div>
                                     </h6>
-                                </div>
+                                </div> --}}
                             </div>
                         </td>
                         <td>
                             <div class="mt-4">
                                 <h5>
                                     <span class="badge text-white" style="margin-left: 20px; background-color: #161b17">
-                                        #{{$pegawai->nomor_pegawai}}
+                                        #{{$user->nomor_pegawai}}
                                     </span>
                                 </h5>
                             </div>
@@ -107,7 +107,7 @@ active
                             <div class="mt-4">
                                 <h5>
                                     <span class="badge text-white" style="margin-left: 20px; background-color: #6777EF;">
-                                        {{$pegawai->jabatan}}
+                                        {{$user->jabatan}}
                                     </span>
                                 </h5>
                             </div>
@@ -116,244 +116,25 @@ active
                             <div class="mt-4">
                                 <h5>
                                     <span class="badge text-white" style="margin-left: 20px; background-color: #6777EF;">
-                                        {{$pegawai->role}}
+                                        {{$user->role}}
                                     </span>
                                 </h5>
                             </div>
                         </td>
                         @if(auth()->user()->role == "SuperAdmin")
-                        <td>
-                            <div class="row mt-2">
-                              <a href="{{ route('user.edit', Crypt::encryptString($pegawai->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a>
+                            <td>
+                                <div class="row mt-2">
+                                {{-- <a href="{{ route('user.edit', Crypt::encryptString($user->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a> --}}
 
-                              <form action="{{ route('user.destroy',  Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                  {{ csrf_field() }}
-                                  <input type="hidden" name="_method" value="DELETE">
-                                  <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                              </form>
+                                <form action="{{ route('user.destroy',  Crypt::encryptString($user->id)) }}" method="POST">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
+                                </form>
 
-                            </div>
-                        </td>
+                                </div>
+                            </td>
                         @endif
-
-                        {{-- @if ( $pegawai->status == "Belum Hadir" )
-                            <td>
-                                <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                    <img class="img" style="margin-right: 0px; margin-left: 60px; height: 75px; width: 75px; border-radius: 100%; border: 3px solid #838383; object-fit: cover;" src="{{$pegawai->getFotoPegawai()}}" alt="">
-                                </a>
-                            </td>
-                            <td>
-                                <div class="mt-2">
-                                    <div class="row">
-                                        <a style="color: black;" href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                            <h4>
-                                                {{$pegawai->nama_lengkap()}}
-                                            </h4>
-                                        </a>
-                                    </div>
-                                    <div class="row">
-                                        <h6>
-                                            <div class="text-muted text-small font-600-bold"><i class="fas fa-circle"></i> Belum Hadir</div>
-                                        </h6>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="mt-4">
-                                    <h5>
-                                        <span class="badge text-white" style="margin-left: 20px; background-color: #161b17">
-                                            #{{$pegawai->nomor_pegawai}}
-                                        </span>
-                                    </h5>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="mt-4">
-                                    <h5>
-                                        <span class="badge text-white" style="margin-left: 20px; background-color: #6777EF;">
-                                            {{$pegawai->jabatan}}
-                                        </span>
-                                    </h5>
-                                </div>
-                            </td>
-                            @if(auth()->user()->role == "SuperAdmin")
-                            <td>
-                                <div class="row mt-2">
-                                    <a href="{{ route('pegawai.edit', Crypt::encryptString($pegawai->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a>
-
-                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                    </form>
-                                </div>
-                            </td>
-                            @endif
-
-                        @elseif ( $pegawai->status == "Sudah Hadir" )
-                            <td>
-                                <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                    <img class="img" style="margin-right: 0px; margin-left: 60px; height: 75px; width: 75px; border-radius: 100%; border: 3px solid #47C363; object-fit: cover;" src="{{$pegawai->getFotoPegawai()}}" alt="">
-                                </a>
-                            </td>
-                            <td>
-                                <div class="mt-2">
-                                    <div class="row">
-                                        <a style="color: black;" href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                            <h4>
-                                                {{$pegawai->nama_lengkap()}}
-                                            </h4>
-                                        </a>
-                                    </div>
-                                    <div class="row">
-                                        <h6>
-                                            <div class="text-success text-small font-600-bold"><i class="fas fa-circle"></i> Sudah Hadir</div>
-                                        </h6>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="mt-4">
-                                    <h5>
-                                        <span class="badge text-white" style="margin-left: 20px; background-color: #161b17">
-                                            #{{$pegawai->nomor_pegawai}}
-                                        </span>
-                                    </h5>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="mt-4">
-                                    <h5>
-                                        <span class="badge text-white" style="margin-left: 20px; background-color: #6777EF;">
-                                            {{$pegawai->jabatan}}
-                                        </span>
-                                    </h5>
-                                </div>
-                            </td>
-                            @if(auth()->user()->role == "SuperAdmin")
-                            <td>
-                                <div class="row mt-2">
-                                    <a href="{{ route('pegawai.edit', Crypt::encryptString($pegawai->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a>
-
-                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                    </form>
-                                </div>
-                            </td>
-                            @endif
-
-                        @elseif ( $pegawai->status == "Tidak Hadir" )
-                            <td>
-                                <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                    <img class="img" style="margin-right: 0px; margin-left: 60px; height: 75px; width: 75px; border-radius: 100%; border: 3px solid #FC544B; object-fit: cover;" src="{{$pegawai->getFotoPegawai()}}" alt="">
-                                </a>
-                            </td>
-                            <td>
-                                <div class="mt-2">
-                                    <div class="row">
-                                        <a style="color: black;" href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                            <h4>
-                                                {{$pegawai->nama_lengkap()}}
-                                            </h4>
-                                        </a>
-                                    </div>
-                                    <div class="row">
-                                        <h6>
-                                            <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir</div>
-                                        </h6>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="mt-4">
-                                    <h5>
-                                        <span class="badge text-white" style="margin-left: 20px; background-color: #161b17">
-                                            #{{$pegawai->nomor_pegawai}}
-                                        </span>
-                                    </h5>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="mt-4">
-                                    <h5>
-                                        <span class="badge text-white" style="margin-left: 20px; background-color: #6777EF;">
-                                            {{$pegawai->jabatan}}
-                                        </span>
-                                    </h5>
-                                </div>
-                            </td>
-                            @if(auth()->user()->role == "SuperAdmin")
-                            <td>
-                                <div class="row mt-2">
-                                    <a href="{{ route('pegawai.edit', Crypt::encryptString($pegawai->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a>
-
-                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                    </form>
-                                </div>
-                            </td>
-                            @endif
-
-                        @elseif ( $pegawai->status == "Sudah Pulang" )
-                            <td>
-                                <a href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                    <img class="img" style="margin-right: 0px; margin-left: 60px; height: 75px; width: 75px; border-radius: 100%; border: 3px solid #FFA426; object-fit: cover;" src="{{$pegawai->getFotoPegawai()}}" alt="">
-                                </a>
-                            </td>
-                            <td>
-                                <div class="mt-2">
-                                    <div class="row">
-                                        <a style="color: black;" href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                            <h4>
-                                                {{$pegawai->nama_lengkap()}}
-                                            </h4>
-                                        </a>
-                                    </div>
-                                    <div class="row">
-                                        <h6>
-                                            <div class="text-warning text-small font-600-bold"><i class="fas fa-circle"></i> Sudah Pulang</div>
-                                        </h6>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="mt-4">
-                                    <h5>
-                                        <span class="badge text-white" style="margin-left: 20px; background-color: #161b17">
-                                            #{{$pegawai->nomor_pegawai}}
-                                        </span>
-                                    </h5>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="mt-4">
-                                    <h5>
-                                        <span class="badge text-white" style="margin-left: 20px; background-color: #6777EF;">
-                                            {{$pegawai->jabatan}}
-                                        </span>
-                                    </h5>
-                                </div>
-                            </td>
-                            @if(auth()->user()->role == "SuperAdmin")
-                            <td>
-                                <div class="row mt-2">
-                                    <a href="{{ route('pegawai.edit', Crypt::encryptString($pegawai->id)) }}" class="btn btn-md btn-warning m-2" type="button"><i class="fas fa-edit mr-2"></i> Edit</a>
-
-                                    <form action="{{ route('pegawai.destroy', Crypt::encryptString($pegawai->id)) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
-                                    </form>
-                                </div>
-                            </td>
-                            @endif
-
-                        @endif --}}
-
                     </tr>
                     @empty
                     @endforelse

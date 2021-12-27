@@ -47,6 +47,9 @@ active
                     <div class="form-group">
                         <label for="nama_depan" class="form-label"> Nama Depan : </label>
                         {!! Form::text('nama_depan', null, ['class'=>'form-control','id'=>'nama_depan']) !!}
+                        @if($errors->has('nama_depan'))
+                            <span class="help-block text-danger">{{$errors->first('nama_depan')}}</span>
+                        @endif
                     </div>
                     <div class="form-group">
                         <label for="nama_belakang" class="form-label"> Nama Belakang : </label>

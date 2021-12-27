@@ -80,7 +80,7 @@ active
                                 <div class="col-12 col-md-6 col-lg-6 ">
                                     <div class="form-group {{$errors->has('id') ? 'has-error' : ''}}">
                                         <label for="id" class="form-label"> ID : </label>
-                                        {!! Form::text('id', $data_presensi->pegawai->id, ['class'=>'form-control','id'=>'id','name'=>'id','readonly']) !!}
+                                        {!! Form::text('id', $data_presensi->id, ['class'=>'form-control','id'=>'id','name'=>'id','readonly']) !!}
                                         @if($errors->has('id'))
                                             <span class="help-block text-danger">{{$errors->first('id')}}</span>
                                         @endif

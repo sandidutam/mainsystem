@@ -4,6 +4,9 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Models\Pegawai;
+use App\Models\Presensi;
+use Illuminate\Support\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,7 +27,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('presensi:status')->dailyAt('00:00');
+        $schedule->command('pegawai:default')->dailyAt('00:00');
+
+        $schedule->command('pegawai:status')->dailyAt('19:05');
+
+        // $schedule->command('presensi:bolos')->dailyAt('19:00');
+
+
     }
 
     /**

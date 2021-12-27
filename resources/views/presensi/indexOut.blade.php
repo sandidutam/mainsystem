@@ -95,14 +95,14 @@ active
                                 @forelse($data_presensi as $item)
                                 <tr>
                                     <td><?= $i; ?></td>
-                                    <td>{{$item->nomor_pegawai}}</td>
-                                    <td>{{$item->pegawai->nama_lengkap()}}</td>
-                                    <td>{{$item->pegawai->jabatan}}</td>
-                                    <td>{{$item->pegawai->sektor_area}}</td>
+                                    <td>{{$item->nomor_pegawai}} {{$item->id}}</td>
+                                    <td>{{$item->nama_lengkap()}}</td>
+                                    <td>{{$item->jabatan}}</td>
+                                    <td>{{$item->sektor_area}}</td>
                                     <td>
                                         <div class="row">
                                             <div class="col">
-                                                <a href="{{ route('presensi.checkout', $item->id) }}" class="btn btn-md btn-danger text-white" type="button">Presensi Keluar</a>
+                                                <a href="{{ route('presensi.checkout', Crypt::encryptString($item->id)) }}" class="btn btn-md btn-danger text-white" type="button">Presensi Keluar</a>
                                             </div>
                                         </div>
                                     </td>

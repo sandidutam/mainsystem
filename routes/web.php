@@ -18,9 +18,6 @@ use App\Http\Controllers\PegawaiController;
 //     return view('welcome');
 // });
 
-// Route::get('/main', function () {
-//     return view('layouts.main');
-// });
 
 Route::get('/login','AuthController@login')->middleware('guest')->name('login');
 Route::post('/postlogin','AuthController@postlogin');
@@ -35,6 +32,7 @@ Route::get('/logout','AuthController@logout');
 
 
 
+
 Route::group(['middleware' => ['auth','nocache']], function(){
     Route::get('/','DashboardController@index')->name('dashboard.index');
     // Route::resource('/pegawai','PegawaiController')->except(['pegawai.create','pegawai.store','pegawai.update','pegawai.edit','pegawai.destroy']);
@@ -42,6 +40,7 @@ Route::group(['middleware' => ['auth','nocache']], function(){
 
     Route::get('/pegawai', 'PegawaiController@index')->name('pegawai.index');
     Route::get('/pegawai/{id}/show', 'PegawaiController@show')->name('pegawai.show');
+    Route::post('/pegawai/resetstatus', 'PegawaiController@resetStatus')->name('pegawai.reset_status');
 
     Route::get('/user', 'UserController@index')->name('user.index');
     Route::get('/user/{id}/show', 'UserController@show')->name('user.show');
@@ -64,20 +63,18 @@ Route::group(['middleware' => ['auth','nocache']], function(){
 Route::middleware(['auth', 'CheckRole:SuperAdmin'])->group(function () {
     Route::get('/user/create','UserController@create')->name('user.create');
     Route::post('/user/store', 'UserController@store')->name('user.store');
-    Route::get('/user/{id}/edit','UserController@edit')->name('user.edit');
+    // Route::get('/user/{id}/edit','UserController@edit')->name('user.edit');
     Route::put('/user/{id}/update','UserController@update')->name('user.update');
     Route::delete('/user/{id}/destroy', 'UserController@destroy')->name('user.destroy');
+    Route::post('/pegawai/resetstatus', 'PegawaiController@resetStatus')->name('pegawai.reset_status');
 
 });
 
 Route::middleware(['auth', 'CheckRole:SuperAdmin,Admin,Akuntan'])->group(function () {
     Route::get('/neraca', 'NeracaController@index')->name('neraca.index');
     Route::get('/neraca/{id}/detail', 'NeracaController@show')->name('neraca.detail');
-    Route::get('/neraca/debit', 'NeracaController@debit')->name('neraca.debit');
-    Route::get('/neraca/kredit', 'NeracaController@kredit')->name('neraca.kredit');
     Route::get('/neraca/exportexcel', 'NeracaController@exportExcel')->name('neraca.exportexcel');
     Route::get('/neraca/exportpdf', 'NeracaController@exportPdf')->name('neraca.exportpdf');
-
 
 });
 
@@ -85,7 +82,6 @@ Route::middleware(['auth', 'CheckRole:SuperAdmin,Admin'])->group(function () {
     // Employee Administration Task
     Route::get('/pegawai/create','PegawaiController@create')->name('pegawai.create');
     Route::post('/pegawai/store', 'PegawaiController@store')->name('pegawai.store');
-    Route::get('/pegawai/{id}/edit','PegawaiController@edit')->name('pegawai.edit');
     Route::put('/pegawai/{id}/update','PegawaiController@update')->name('pegawai.update');
     Route::delete('/pegawai/{id}/destroy', 'PegawaiController@destroy')->name('pegawai.destroy');
 
@@ -108,6 +104,7 @@ Route::middleware(['auth', 'CheckRole:SuperAdmin,Akuntan'])->group(function () {
     Route::get('/neraca/{id}/edit', 'NeracaController@edit')->name('neraca.edit');
     Route::put('/neraca/{id}/update', 'NeracaController@update')->name('neraca.update');
     Route::delete('/neraca/{id}/destroy', 'NeracaController@destroy')->name('neraca.destroy');
+    Route::post('/neraca/akun', 'NeracaController@updateAkun')->name('neraca.update_akun');
 });
 
 Route::middleware(['auth', 'CheckRole:SuperAdmin,Mandor'])->group(function () {
@@ -119,6 +116,7 @@ Route::middleware(['auth', 'CheckRole:SuperAdmin,Mandor'])->group(function () {
     Route::get('/presensi/{id}/masuk','PresensiController@checkIn')->name('presensi.checkin');
     Route::get('/presensi/{id}/keluar','PresensiController@checkOut')->name('presensi.checkout');
     Route::delete('/presensi/{id}/destroy', 'PresensiController@destroy')->name('presensi.destroy');
+    Route::post('/presensi/absen' , 'PresensiController@absen')->name('presensi.absen');
 
 
 });

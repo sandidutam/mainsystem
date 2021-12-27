@@ -41,7 +41,7 @@ active
                                     <div class="activities" style="font-size : 18px;">
                                         <h6>{{date('d F Y', strtotime($hari_ini))}}</h6>
                                         @foreach ($data_hari_ini as $item)
-                                            @if ($item->keterangan == null && $item->catatan_masuk == !null && $item->catatan_keluar == null)
+                                            @if ($item->keterangan == 'Hadir' && $item->catatan_masuk == !null && $item->catatan_keluar == null)
                                                 <div class="activity">
                                                     <div class="activity-icon bg-success text-white shadow-primary">
                                                         <i class="fas fa-sign-in-alt"></i>
@@ -58,7 +58,7 @@ active
                                                         <p style="font-weight: bold;"><a href="{{ route('pegawai.show', $item->pegawai_id) }}">{{$item->pegawai->nama_lengkap()}}</a> sudah masuk ke kantor.</p>
                                                     </div>
                                                 </div>
-                                            @elseif ($item->keterangan == null && $item->catatan_masuk == !null && $item->catatan_keluar == !null)
+                                            @elseif ($item->keterangan == 'Hadir' && $item->catatan_masuk == !null && $item->catatan_keluar == !null)
                                                 <div class="activity">
                                                     <div class="activity-icon bg-primary text-white shadow-primary">
                                                         <i class="fas fa-check"></i>
@@ -132,7 +132,7 @@ active
                                     <div class="activities" style="font-size : 18px;">
                                         <h6>{{date('d F Y', strtotime($kemarin))}}</h6>
                                         @foreach ($data_kemarin as $item)
-                                            @if ($item->keterangan == null && $item->catatan_masuk == !null && $item->catatan_keluar == null)
+                                            @if ($item->keterangan == 'Hadir' && $item->catatan_masuk == !null && $item->catatan_keluar == null)
                                                 <div class="activity">
                                                     <div class="activity-icon bg-success text-white shadow-primary">
                                                         <i class="fas fa-sign-in-alt"></i>
@@ -149,7 +149,7 @@ active
                                                         <p style="font-weight: bold;"><a href="{{ route('pegawai.show', $item->pegawai_id) }}">{{$item->pegawai->nama_lengkap()}}</a> sudah masuk ke kantor.</p>
                                                     </div>
                                                 </div>
-                                            @elseif ($item->keterangan == null && $item->catatan_masuk == !null && $item->catatan_keluar == !null)
+                                            @elseif ($item->keterangan == 'Hadir' && $item->catatan_masuk == !null && $item->catatan_keluar == !null)
                                                 <div class="activity">
                                                     <div class="activity-icon bg-primary text-white shadow-primary">
                                                         <i class="fas fa-check"></i>
@@ -225,7 +225,7 @@ active
                                             {{-- <h6 class="mt-2">{{date('d F Y', strtotime($item->tanggal))}}</h6> --}}
                                             <h6>{{$hari}}</h6>
                                             @foreach ($hari_list as $item)
-                                                @if ($item->keterangan == null && $item->catatan_masuk == !null && $item->catatan_keluar == null)
+                                                @if ($item->keterangan == 'Hadir' && $item->catatan_masuk == !null && $item->catatan_keluar == null)
                                                     <div class="activity">
                                                         <div class="activity-icon bg-success text-white shadow-primary">
                                                             <i class="fas fa-sign-in-alt"></i>
@@ -242,7 +242,7 @@ active
                                                             <p style="font-weight: bold;"><a href="{{ route('pegawai.show', $item->pegawai_id) }}">{{$item->pegawai->nama_lengkap()}}</a> sudah masuk ke kantor.</p>
                                                         </div>
                                                     </div>
-                                                @elseif ($item->keterangan == null && $item->catatan_masuk == !null && $item->catatan_keluar == !null)
+                                                @elseif ($item->keterangan == 'Hadir' && $item->catatan_masuk == !null && $item->catatan_keluar == !null)
                                                     <div class="activity">
                                                         <div class="activity-icon bg-primary text-white shadow-primary">
                                                             <i class="fas fa-check"></i>

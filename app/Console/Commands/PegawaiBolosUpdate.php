@@ -3,18 +3,15 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use App\Models\Pegawai;
-use App\Models\Presensi;
 
-class PresensiStatusUpdate extends Command
+class PegawaiBolosUpdate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'pegawai:default';
+    protected $signature = 'pegawai:status';
 
     /**
      * The console command description.
@@ -40,7 +37,13 @@ class PresensiStatusUpdate extends Command
      */
     public function handle()
     {
-        DB::table('pegawai')->update(['status' => 'Belum Hadir']);
+        Pegawai::whereDoesntHave('presensi', function ($query) {
+            $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+            $query->where('tanggal', $today);
+            })->update([
+            'status' => 'Tidak Hadir'
+            ]);
+
         return Command::SUCCESS;
     }
 }

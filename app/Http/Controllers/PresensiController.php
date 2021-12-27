@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use PDF;
+use Carbon\Carbon;
 use App\Models\Pegawai;
 use App\Models\Presensi;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use App\Exports\PresensiExport;
-use App\Exports\PresensiMultiSheetExport;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use PDF;
+use Illuminate\Support\Facades\Crypt;
+use App\Exports\PresensiMultiSheetExport;
+use Illuminate\Support\Facades\Validator;
 
 class PresensiController extends Controller
 {
@@ -66,17 +67,56 @@ class PresensiController extends Controller
         //                             ->where('jam_keluar' , '=', null)
         //                             ->get();
 
-        $data_presensi = Presensi::whereHas('pegawai', function ($query) {
+        // $data_presensi = Presensi::whereHas('pegawai', function ($query) {
+        //     $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+        //     $query->where('tanggal', '=', $today)
+        //     ->where('jam_keluar' , '=', null);
+        //     })->with('pegawai')->get();
+
+        $data_presensi = Pegawai::select("*")->orderBy('nama_depan','ASC')->orderBy('nama_belakang','ASC')->whereHas('presensi', function ($query) {
             $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
             $query->where('tanggal', '=', $today)
             ->where('jam_keluar' , '=', null);
-            })->with('pegawai')->get();
+            })->get();
 
         // return $data_presensi;
         // $data_presensi = Presensi::all();
         return view('presensi.indexOut',compact('data_presensi'));
     }
 
+    public function checkIn($id)
+    {
+        $id_pegawai = Crypt::decryptString($id);
+
+        $data_pegawai = Pegawai::find($id_pegawai);
+
+        $today = Carbon::now()->timezone('Asia/Jakarta')->format('D, d-m-Y');
+
+        return view ('presensi.checkin',compact('data_pegawai','today'));
+    }
+
+    public function checkOut($id)
+    {
+        $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+
+        $id_pegawai = Crypt::decryptString($id);
+
+        // return $id_pegawai;
+
+        $data_presensi = Presensi::where('tanggal', '=', $today)->where('pegawai_id', '=', $id_pegawai)->first();
+
+        // return $data_presensi;
+
+        // $data_presensi = Presensi::whereHas('pegawai', function ($query) {
+        //     $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+        //     $query->where('tanggal', '=', $today)
+        //     ->where('pegawai_id', '=', $id_pegawai);
+        //     })->with('pegawai')->get();
+
+        // return $data_presensi;
+
+        return view ('presensi.checkout',compact('data_presensi','today'));
+    }
 
     public function history()
     {
@@ -87,9 +127,7 @@ class PresensiController extends Controller
         $hari_ini = Carbon::now()->timezone('Asia/Jakarta')->format('d F Y');
         $jml_pegawai= Pegawai::all()->count();
 
-        $today_presensi = Presensi::where('tanggal', '=', $today)->orderBy('updated_at','DESC')->get();
-
-
+        $today_presensi = Presensi::orderBy('updated_at','DESC')->where('tanggal', '=', $today)->get();
 
         $jml_hadir = Pegawai::whereHas('presensi', function ($query) {
                                 $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
@@ -130,7 +168,7 @@ class PresensiController extends Controller
         $data_pegawai = Pegawai::all();
 
 
-        $data_belum_hadir = Pegawai::select("*")
+        $data_belum_hadir = Pegawai::select("*")->orderBy('nama_depan','ASC')->orderBy('nama_belakang','ASC')
                         ->whereDoesntHave('presensi', function ($query) {
                             $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
                             $query->where('tanggal', $today);
@@ -168,23 +206,155 @@ class PresensiController extends Controller
         $a = Presensi::select('created_at')->where('pegawai_id', 1 )->where('tanggal', '=', $kemarin)->get();
         $b = Presensi::select('updated_at')->where('pegawai_id', 1 )->where('tanggal', '=', $kemarin)->get();
 
-        // $c = $a->diffInDays($b);
-        // return $c;
-
         $x = Presensi::where('pegawai_id', 1 )->where('tanggal', '=', $kemarin)->value('created_at');
         $y = Presensi::where('pegawai_id', 1 )->where('tanggal', '=', $kemarin)->value('updated_at');
-
-        // $ak =
-        // $xs = $y-$x;
-        // return $x;
-
-        // return $data_lain;
 
         $izin = $jml_cuti+$jml_izin+$jml_sakit;
         $belum_hadir = $jml_pegawai-$jml_hadir-$jml_bolos-$jml_cuti-$jml_izin-$jml_sakit;
 
+        $date0v2 = Carbon::now()->subDays(0)->timezone('Asia/Jakarta')->format('d F Y');
+        $date1v2 = Carbon::now()->subDays(1)->timezone('Asia/Jakarta')->format('d F Y');
+        $date2v2 = Carbon::now()->subDays(2)->timezone('Asia/Jakarta')->format('d F Y');
+        $date3v2 = Carbon::now()->subDays(3)->timezone('Asia/Jakarta')->format('d F Y');
+        $date4v2 = Carbon::now()->subDays(4)->timezone('Asia/Jakarta')->format('d F Y');
+        $date5v2 = Carbon::now()->subDays(5)->timezone('Asia/Jakarta')->format('d F Y');
+        $date6v2 = Carbon::now()->subDays(6)->timezone('Asia/Jakarta')->format('d F Y');
+        $date7v2 = Carbon::now()->subDays(7)->timezone('Asia/Jakarta')->format('d F Y');
 
-        return view('presensi.history', compact('data_presensi','belum_hadir','jml_hadir','jml_bolos','jml_cuti','jml_izin','jml_sakit','izin','hari_ini','today_presensi','data_pegawai','data_hadir','data_belum_hadir','data_bolos','data_lain'));
+        $categories =       [
+            $date6v2,
+            $date5v2,
+            $date4v2,
+            $date3v2,
+            $date2v2,
+            $date1v2,
+            $date0v2
+                            ];
+
+        $date1 = Carbon::now()->subDays(1)->timezone('Asia/Jakarta')->format('Y-m-d');
+        $date2 = Carbon::now()->subDays(2)->timezone('Asia/Jakarta')->format('Y-m-d');
+        $date3 = Carbon::now()->subDays(3)->timezone('Asia/Jakarta')->format('Y-m-d');
+        $date4 = Carbon::now()->subDays(4)->timezone('Asia/Jakarta')->format('Y-m-d');
+        $date5 = Carbon::now()->subDays(5)->timezone('Asia/Jakarta')->format('Y-m-d');
+        $date6 = Carbon::now()->subDays(6)->timezone('Asia/Jakarta')->format('Y-m-d');
+        $date7 = Carbon::now()->subDays(7)->timezone('Asia/Jakarta')->format('Y-m-d');
+
+        $group1sumhadir = Presensi::where('tanggal', '=', $today)->where('keterangan','Hadir')->count();
+        $group1sumbolos = Presensi::where('tanggal', '=', $today)->where('keterangan','Bolos')->count();
+        $group1sumcuti = Presensi::where('tanggal', '=', $today)->where('keterangan','Cuti')->count();
+        $group1sumsakit = Presensi::where('tanggal', '=', $today)->where('keterangan','Sakit')->count();
+        $group1sumizin = Presensi::where('tanggal', '=', $today)->where('keterangan','Izin')->count();
+
+        $group2sumhadir = Presensi::where('tanggal', '=', $date1)->where('keterangan','Hadir')->count();
+        $group2sumbolos = Presensi::where('tanggal', '=', $date1)->where('keterangan','Bolos')->count();
+        $group2sumcuti = Presensi::where('tanggal', '=', $date1)->where('keterangan','Cuti')->count();
+        $group2sumsakit = Presensi::where('tanggal', '=', $date1)->where('keterangan','Sakit')->count();
+        $group2sumizin = Presensi::where('tanggal', '=', $date1)->where('keterangan','Izin')->count();
+
+        $group3sumhadir = Presensi::where('tanggal', '=', $date2)->where('keterangan','Hadir')->count();
+        $group3sumbolos = Presensi::where('tanggal', '=', $date2)->where('keterangan','Bolos')->count();
+        $group3sumcuti = Presensi::where('tanggal', '=', $date2)->where('keterangan','Cuti')->count();
+        $group3sumsakit = Presensi::where('tanggal', '=', $date2)->where('keterangan','Sakit')->count();
+        $group3sumizin = Presensi::where('tanggal', '=', $date2)->where('keterangan','Izin')->count();
+
+        $group4sumhadir = Presensi::where('tanggal', '=', $date3)->where('keterangan','Hadir')->count();
+        $group4sumbolos = Presensi::where('tanggal', '=', $date3)->where('keterangan','Bolos')->count();
+        $group4sumcuti = Presensi::where('tanggal', '=', $date3)->where('keterangan','Cuti')->count();
+        $group4sumsakit = Presensi::where('tanggal', '=', $date3)->where('keterangan','Sakit')->count();
+        $group4sumizin = Presensi::where('tanggal', '=', $date3)->where('keterangan','Izin')->count();
+
+        $group5sumhadir = Presensi::where('tanggal', '=', $date4)->where('keterangan','Hadir')->count();
+        $group5sumbolos = Presensi::where('tanggal', '=', $date4)->where('keterangan','Bolos')->count();
+        $group5sumcuti = Presensi::where('tanggal', '=', $date4)->where('keterangan','Cuti')->count();
+        $group5sumsakit = Presensi::where('tanggal', '=', $date4)->where('keterangan','Sakit')->count();
+        $group5sumizin = Presensi::where('tanggal', '=', $date4)->where('keterangan','Izin')->count();
+
+        $group6sumhadir = Presensi::where('tanggal', '=', $date5)->where('keterangan','Hadir')->count();
+        $group6sumbolos = Presensi::where('tanggal', '=', $date5)->where('keterangan','Bolos')->count();
+        $group6sumcuti = Presensi::where('tanggal', '=', $date5)->where('keterangan','Cuti')->count();
+        $group6sumsakit = Presensi::where('tanggal', '=', $date5)->where('keterangan','Sakit')->count();
+        $group6sumizin = Presensi::where('tanggal', '=', $date5)->where('keterangan','Izin')->count();
+
+        $group7sumhadir = Presensi::where('tanggal', '=', $date6)->where('keterangan','Hadir')->count();
+        $group7sumbolos = Presensi::where('tanggal', '=', $date6)->where('keterangan','Bolos')->count();
+        $group7sumcuti = Presensi::where('tanggal', '=', $date6)->where('keterangan','Cuti')->count();
+        $group7sumsakit = Presensi::where('tanggal', '=', $date6)->where('keterangan','Sakit')->count();
+        $group7sumizin = Presensi::where('tanggal', '=', $date6)->where('keterangan','Izin')->count();
+
+        $data1 = [
+            $group7sumhadir,
+            $group6sumhadir,
+            $group5sumhadir,
+            $group4sumhadir,
+            $group3sumhadir,
+            $group2sumhadir,
+            $group1sumhadir
+
+        ];
+        $data2 = [
+            $group7sumbolos,
+            $group6sumbolos,
+            $group5sumbolos,
+            $group4sumbolos,
+            $group3sumbolos,
+            $group2sumbolos,
+            $group1sumbolos
+
+        ];
+        $data3 = [
+            $group7sumcuti,
+            $group6sumcuti,
+            $group5sumcuti,
+            $group4sumcuti,
+            $group3sumcuti,
+            $group2sumcuti,
+            $group1sumcuti
+
+        ];
+        $data4 = [
+            $group7sumsakit,
+            $group6sumsakit,
+            $group5sumsakit,
+            $group4sumsakit,
+            $group3sumsakit,
+            $group2sumsakit,
+            $group1sumsakit
+
+        ];
+        $data5 = [
+            $group7sumizin,
+            $group6sumizin,
+            $group5sumizin,
+            $group4sumizin,
+            $group3sumizin,
+            $group2sumizin,
+            $group1sumizin
+
+        ];
+
+        // dd(json_encode($categories));
+
+        return view('presensi.history', compact('data_presensi',
+                                                'belum_hadir',
+                                                'jml_hadir',
+                                                'jml_bolos',
+                                                'jml_cuti','jml_izin',
+                                                'jml_sakit',
+                                                'izin',
+                                                'hari_ini',
+                                                'today_presensi',
+                                                'data_pegawai',
+                                                'data_hadir',
+                                                'data_belum_hadir',
+                                                'data_bolos',
+                                                'data_lain',
+                                                'categories',
+                                                'data1',
+                                                'data2',
+                                                'data3',
+                                                'data4',
+                                                'data5'
+                                                ));
     }
 
     public function activity()
@@ -222,11 +392,6 @@ class PresensiController extends Controller
 
 
         return view('presensi.activity', compact('data_presensi','hari_ini','kemarin','besok','tanggal','data_hari_ini','data_kemarin','data_lain'));
-    }
-
-    public function create()
-    {
-
     }
 
     public function store(Request $request)
@@ -283,6 +448,7 @@ class PresensiController extends Controller
                 $presensi->tanggal = $today;
                 $presensi->jam_masuk = $current_time;
                 $presensi->catatan_masuk = $note;
+                $presensi->keterangan = "Hadir";
 
                 $id_peg = $request->id;
                 $find_pegawai = Pegawai::find($id_peg);
@@ -304,6 +470,20 @@ class PresensiController extends Controller
 
         elseif(isset($request->btn_absen))
         {
+            $id_pegawai = $request->id;
+
+            $data_pegawai = Pegawai::find($id_pegawai);
+
+            $validator = Validator::make($request->all(), [
+                'keterangan' => 'required',
+            ]);
+
+            if($validator->fails()) {
+                return redirect()->route('presensi.checkin', Crypt::encryptString($data_pegawai->id))
+                                    ->withErrors($validator)
+                                    ->withInput();
+            }
+
 
             $nama = $request->nama_lengkap;
             $ket = $request->keterangan;
@@ -312,6 +492,7 @@ class PresensiController extends Controller
             $presensi->tanggal = $today;
             $presensi->jam_masuk = "-";
             $presensi->catatan_masuk = "-";
+            $presensi->catatan_keluar = "-";
             $presensi->jam_keluar = "-";
             $presensi->keterangan = $request->keterangan;
 
@@ -352,26 +533,7 @@ class PresensiController extends Controller
         return view ('presensi.checkin',compact('data_pegawai'));
     }
 
-    public function checkIn($id)
-    {
-        $today = Carbon::now()->timezone('Asia/Jakarta')->format('D, d-m-Y');
-        $data_pegawai = Pegawai::find($id);
-        return view ('presensi.checkin',compact('data_pegawai','today'));
-    }
-    public function checkOut($id)
-    {
-        $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
 
-        $data_presensi = Presensi::find($id);
-
-        // $data_presensi = Presensi::whereHas('pegawai', function ($query) {
-        //     $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
-        //     $query->where('tanggal', '=', $today)
-        //     ->where('id', '=', $id);
-        //     })->with('pegawai')->get();
-
-        return view ('presensi.checkout',compact('data_presensi','today'));
-    }
     /**
      * Update the specified resource in storage.
      *
@@ -439,12 +601,42 @@ class PresensiController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function absen(Request $request)
+    {
+        $data = Pegawai::select("*")->whereDoesntHave('presensi', function ($query) {
+            $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+            $query->where('tanggal', $today);
+        })->get();
+
+        $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+
+        $timestamp = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
+
+        Pegawai::whereDoesntHave('presensi', function ($query) {
+            $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+            $query->where('tanggal', $today);
+            })->update([
+            'status' => 'Tidak Hadir'
+            ]);
+
+        foreach ( $data as $item ) {
+            DB::table('presensi')->insert([
+                                        'pegawai_id' => $item->id,
+                                        'tanggal' => $today,
+                                        'jam_masuk' => '-',
+                                        'jam_keluar' => '-',
+                                        'catatan_masuk' => '-',
+                                        'catatan_keluar' => '-',
+                                        'keterangan' => 'Bolos',
+                                        'created_at' => $timestamp,
+                                        'updated_at' => $timestamp
+                                        ]);
+        }
+
+        return redirect()->intended('/presensi/riwayat')->with('notifikasi_sukses', 'Sudah di catat Bolos!');
+    }
+
+
     public function destroy($id)
     {
         $data_presensi = Presensi::findOrFail($id);

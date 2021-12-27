@@ -79,6 +79,7 @@
   <script src="{{asset('stisla-master/assets/js/page/modules-datatables.js')}}"></script>
   <script src="{{asset('stisla-master/assets/js/page/components-user.js')}}"></script>
 
+  @yield('footer')
 
 </body>
 </html>

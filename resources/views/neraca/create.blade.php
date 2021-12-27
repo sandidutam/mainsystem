@@ -10,7 +10,7 @@
 
 @section('neraca.active')
 active
-@endsection 
+@endsection
 
 @section('neracaindex.active')
 active
@@ -30,18 +30,18 @@ active
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <a href="{{ route('neraca.index') }}" class="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm">
+            <a href="{{ route('neraca.index') }}" class="d-none d-sm-inline-block btn btn-md btn-danger shadow-sm">
             <i class="fas fa-chevron-left mr-2"></i> Kembali</a>
         </div>
-        
+
         <div class="row d-flex justify-content-center ">
             <div class="card">
                 <div class="card-header">
                     <h4>Form Isi Data Transaksi Baru</h4>
                 </div>
-            
+
                 {{-- Alert Notification --}}
-            
+
                 @if(session('notifikasi_sukses'))
                     <div class="alert alert-success alert-dismissible m-3 show fade" role="alert">
                     <div class="alert-body">
@@ -50,23 +50,23 @@ active
                         </button>
                         <i class="fas fa-check"></i>
                         {{session('notifikasi_sukses')}}
-                    </div>  
+                    </div>
                     </div>
                 @endif
 
                 <div class="card-body">
                     <form action="{{ route('neraca.store') }}" method="POST" enctype="multipart/form-data">
-                        {{csrf_field()}}       
+                        {{csrf_field()}}
                         <div class="row">
                             <div class="col">
-                                <div class="form-group {{$errors->has('Transaksi') ? 'has-error' : ''}} "> 
-                                    <label for="transaksi" class="form-label">Nama Transaksi : </label> 
+                                <div class="form-group {{$errors->has('Transaksi') ? 'has-error' : ''}} ">
+                                    <label for="transaksi" class="form-label">Nama Transaksi : </label>
                                     <input type="text" class="form-control" name="transaksi" id="transaksi" placeholder="Isi Nama Transaksi" value="{{old('transaksi')}}">
                                     @if($errors->has('transaksi'))
                                         <span class="help-block text-danger">{{$errors->first('transaksi')}}</span>
                                     @endif
                                 </div>
-                               
+
                                 <div class="form-group mb-2 {{$errors->has('deskripsi') ? 'has-error' : ''}} ">
                                     <label for="deskripsi"> Deskripsi : </label>
                                     <textarea name="deskripsi" class="form-control" placeholder="Isikan Deskripsi" id="deskripsi" rows="2">{{old('deskripsi')}}</textarea>
@@ -74,11 +74,11 @@ active
                                     <span class="help-block text-danger">{{$errors->first('deskripsi')}}</span>
                                     @endif
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-12 col-md-6 col-lg-6">
-                                        <div class="form-group {{$errors->has('debit') ? 'has-error' : ''}} "> 
-                                            <label for="debit" class="form-label"> Debit : </label> 
+                                        <div class="form-group {{$errors->has('debit') ? 'has-error' : ''}} ">
+                                            <label for="debit" class="form-label"> Debit : </label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">
@@ -93,7 +93,7 @@ active
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-6">
-                                        <div class="form-group {{$errors->has('kredit') ? 'has-error' : ''}} "> 
+                                        <div class="form-group {{$errors->has('kredit') ? 'has-error' : ''}} ">
                                             <label for="kredit" class="form-label"> Kredit : </label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -109,16 +109,16 @@ active
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="form-group {{$errors->has('tanggal') ? 'has-error' : ''}} "> 
-                                    <label for="tanggal" class="form-label"> Tanggal Transaksi : </label> 
+
+                                <div class="form-group {{$errors->has('tanggal') ? 'has-error' : ''}} ">
+                                    <label for="tanggal" class="form-label"> Tanggal Transaksi : </label>
                                     <input type="text" autocomplete="off" class="datepicker form-control" name="tanggal" id="tanggal" placeholder="01/01/2021" value="{{old('tanggal')}}">
                                     @if($errors->has('tanggal'))
                                         <span class="help-block text-danger">{{$errors->first('tanggal')}}</span>
                                     @endif
                                 </div>
-                                
-                                <div class="form-group {{$errors->has('foto_bukti') ? 'has-error' : ''}} "> 
+
+                                <div class="form-group {{$errors->has('foto_bukti') ? 'has-error' : ''}} ">
                                     <div class="mb-3">
                                         <label for="foto_bukti" class="form-label">Unggah Gambar Transaksi :</label>
                                         <div class="custom-file">
@@ -129,9 +129,9 @@ active
                                             <span class="help-block text-danger">{{$errors->first('foto_bukti')}}</span>
                                         @endif
                                     </div>
-                                </div>   
+                                </div>
 
-                                <div class="form-group {{$errors->has('file_bukti') ? 'has-error' : ''}} "> 
+                                <div class="form-group {{$errors->has('file_bukti') ? 'has-error' : ''}} ">
                                     <div class="mb-3">
                                         <label for="file_bukti" class="form-label">Unggah File Bukti Transaksi :</label>
                                         <div class="custom-file">
@@ -142,13 +142,13 @@ active
                                             <span class="help-block text-danger">{{$errors->first('file_bukti')}}</span>
                                         @endif
                                     </div>
-                                </div>   
-                                
+                                </div>
+
 
                             </div>
                         </div>
-                        
-                        
+
+
                         <div class="d-sm-flex align-items-center justify-content-start">
                             <div class="row">
                                 <div class="col">
@@ -160,18 +160,18 @@ active
                             </div>
                         </div>
                 </div>
-                    
+
                     </form>
             </div>
-            
+
         </div>
     </div>
 
     <script type="text/javascript">
-        $('.datepicker').datepicker({  
+        $('.datepicker').datepicker({
            format: 'yyyy-mm-dd'
-         });  
-    </script> 
+         });
+    </script>
 </section>
 
 @endsection

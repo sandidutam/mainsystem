@@ -64,7 +64,7 @@ active
                     </div>
                     @endif
 
-                    {!! Form::model($data_pegawai ,['route'=>['presensi.store', $data_pegawai->id], 'method'=>'POST']) !!}
+                    {!! Form::model($data_pegawai ,['route'=>['presensi.store', $data_pegawai->id ], 'method'=>'POST']) !!}
 
                     {{-- Awal Card Informasi Pribadi --}}
 
@@ -137,16 +137,20 @@ active
                                     <div class="form-group {{$errors->has('keterangan') ? 'has-error' : ''}}">
                                         <label for="keterangan" class="mb-2"> Keterangan : </label>
                                         <select name="keterangan" class="form-control" id="keterangan" >
-                                        <option>Pilih</option>
+                                        <option selected="true" style='display: none' value="">Pilih</option>
                                         <option value="Bolos" {{(old('keterangan')=='Bolos')? 'selected' :''}}>Tidak Hadir / Bolos</option>
                                         <option value="Cuti" {{(old('keterangan')=='Cuti')? 'selected' :''}}>Cuti</option>
                                         <option value="Izin" {{(old('keterangan')=='Izin')? 'selected' :''}}>Izin</option>
                                         <option value="Sakit" {{(old('keterangan')=='Sakit')? 'selected' :''}}>Sakit</option>
                                         </select>
-                                        @if($errors->has('keterangan'))
-                                            <span class="help-block text-danger">{{$errors->first('keterangan')}}</span>
-                                        @endif
-                                        <small id="helpId" class="fst-italic text-muted"> <span class=" fw-bold text-danger">Perhatian!</span> Keterangan diisi apabila pegawai tidak masuk kerja</small>
+                                        <div class="div">
+                                            @if($errors->has('keterangan'))
+                                                <span class="help-block text-danger">{{$errors->first('keterangan')}}</span>
+                                            @endif
+                                        </div>
+                                        <div class="div">
+                                            <small id="helpId" class="fst-italic text-muted"> <span class=" fw-bold text-danger">Perhatian!</span> Keterangan diisi apabila pegawai tidak masuk kerja</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

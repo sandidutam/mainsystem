@@ -103,7 +103,7 @@ active
                                     <td>
                                         <div class="row">
                                             <div class="col">
-                                                <a href="{{ route('presensi.checkin', $pegawai->id) }}" class="btn btn-md btn-success" type="button">Presensi Masuk</a>
+                                                <a href="{{ route('presensi.checkin', Crypt::encryptString($pegawai->id)) }}" class="btn btn-md btn-success" type="button">Presensi Masuk</a>
                                             </div>
                                         </div>
                                     </td>

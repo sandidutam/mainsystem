@@ -21,6 +21,8 @@ class CreateNeracaTable extends Migration
             $table->string('debit')->nullable();
             $table->string('kredit')->nullable();
             $table->string('tanggal');
+            $table->string('bulan');
+            $table->string('tahun');
             $table->string('foto_bukti')->nullable();
             $table->string('file_bukti')->nullable();
             $table->timestamps();
