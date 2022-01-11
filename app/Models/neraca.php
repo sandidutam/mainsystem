@@ -28,7 +28,7 @@ class neraca extends Model
         if(!$this->foto_bukti) {
             return asset('images/transaksi/default.jpg');
         }
-        
+
         return asset('images/transaksi/'.$this->foto_bukti);
     }
 
@@ -37,7 +37,7 @@ class neraca extends Model
         if(!$this->file_bukti) {
             return asset('docs/transaksi/default.pdf');
         }
-        
+
         return asset('docs/transaksi/'.$this->file_bukti);
     }
 
@@ -53,7 +53,7 @@ class neraca extends Model
         $sumdebit = DB::table('neraca')
                         ->whereNotNull('debit')
                         ->sum('debit');
-        
+
         return $sumdebit;
     }
 

@@ -26,11 +26,18 @@ class PegawaiController extends Controller
         // $data_pegawai = Pegawai::all();
         // return view('pegawai.index',compact('data_pegawai'));
 
+        // $s1 = Pegawai::orderBy('nama_depan','ASC')->orderBy('nama_depan','ASC')->whereHas('presensi', function ($query){
+        //     $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+        //     $query->where('sektor_area','1');
+        // })->get();
 
         $s1 = Pegawai::orderBy('nama_depan','ASC')->orderBy('nama_depan','ASC')->where('sektor_area','1')->get();
+
         $s2 = Pegawai::orderBy('nama_depan','ASC')->orderBy('nama_depan','ASC')->where('sektor_area','2')->get();
-        $s3 = Pegawai::where('sektor_area','3')->orderBy('nama_depan','ASC')->orderBy('nama_belakang','ASC')->get();
-        $s4 = Pegawai::where('sektor_area','4')->orderBy('nama_depan','ASC')->orderBy('nama_belakang','ASC')->get();
+
+        $s3 = Pegawai::orderBy('nama_depan','ASC')->orderBy('nama_depan','ASC')->where('sektor_area','3')->get();
+
+        $s4 = Pegawai::orderBy('nama_depan','ASC')->orderBy('nama_depan','ASC')->where('sektor_area','4')->get();
 
         $jml_s1 = Pegawai::where('sektor_area','1')->count();
         $jml_s2 = Pegawai::where('sektor_area','2')->count();
@@ -38,7 +45,6 @@ class PegawaiController extends Controller
         $jml_s4 = Pegawai::where('sektor_area','4')->count();
 
 
-        // return $s2;
         $data_hadir = Presensi::whereHas('pegawai', function ($query) {
                                 $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
                                 $query->where('tanggal', '=', $today)
@@ -54,11 +60,12 @@ class PegawaiController extends Controller
         //                     })
         //                     ->get();
 
-        // return $s1_belum_hadir;
 
         $data_pegawai = Pegawai::all();
+        $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
 
         return view('pegawai.index', compact('data_pegawai',
+                                                'today',
                                                 's1',
                                                 's2',
                                                 's3',
@@ -69,12 +76,6 @@ class PegawaiController extends Controller
                                                 'jml_s4'
                                             ));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     public function resetStatus(Request $request)
     {
@@ -222,10 +223,16 @@ class PegawaiController extends Controller
         $name = $data_pegawai->nama_lengkap();
         $pegawai_id = $data_pegawai->id;
 
-        $data_presensi = DB::table('presensi')
-                                    ->where('pegawai_id', '=', $pegawai_id)
-                                    ->where('tanggal' ,'=', $today )
-                                    ->get();
+        // $data_presensi = DB::table('presensi')
+        //                             ->where('pegawai_id', '=', $pegawai_id)
+        //                             ->where('tanggal' ,'=', $today )
+        //                             ->get();
+
+        $data_presensi = Pegawai::select("*")->where('id', $id_pegawai)->whereHas('presensi', function ($query) {
+                                        $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
+                                        $query->where('tanggal', '=', $today)
+                                        ->where('jam_keluar' , '=', null);
+                                        })->get();
 
         $hadir = Presensi::where('pegawai_id', $pegawai_id)->where('keterangan','Hadir')->count();
         $bolos = Presensi::where('pegawai_id', $pegawai_id)->where('keterangan','Bolos')->count();

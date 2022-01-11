@@ -308,41 +308,19 @@ active
                                 <tbody>
                                     @forelse($data_presensi as $pegawai )
                                     <tr>
-
                                         <td>
-                                            <div class="mt-3" style="margin-left: 20px; width: 50px; margin-right: 10px;">
-                                                <span class="badge" style="width: 80px; border-radius: 10px; background-image : linear-gradient(0deg,  #ffffff 50%, #da4439 50%); border: solid 0.5px ;">
-                                                    <div class="row justify-content-center text-white">
-                                                        <h5>
-                                                            {{date('d', strtotime($pegawai->tanggal))}}
-                                                        </h5>
-                                                    </div>
-                                                    <div class="row justify-content-center">
-                                                        <h6>
-                                                            {{date('M Y', strtotime($pegawai->tanggal))}}
-                                                        </h6>
-                                                    </div>
-                                                </span>
-                                                <h4>
-                                                </h4>
-                                            </div>
+
                                         </td>
                                         <td>
-                                            <div class="mt-3" >
-                                                <div class="row">
-                                                    <a style="color: black;" href="{{ route('pegawai.show', Crypt::encryptString($pegawai->id)) }}">
-                                                        <h4>
-                                                            {{$pegawai->pegawai->nama_lengkap()}}
-                                                        </h4>
-                                                    </a>
-                                                </div>
-                                                <div class="row">
-                                                    <h6>
-                                                        <h6>
-                                                            <div class="text-primary text-small font-600-bold"><i class="fas fa-circle"></i>{{$pegawai->pegawai->nomor_pegawai}}</div>
-                                                        </h6>
-                                                    </h6>
-                                                </div>
+                                            <div class="mt-3">
+                                                <a style="color: black;" href="{{ route('pegawai.show', Crypt::encryptString($pegawai->pegawai->id)) }}">
+                                                    <h4>
+                                                        {{$pegawai->pegawai->nama_lengkap()}}
+                                                    </h4>
+                                                </a>
+                                                <h6>
+                                                    <div class="text-primary text-small font-600-bold"><i class="fas fa-circle"></i>{{$pegawai->pegawai->nomor_pegawai}}</div>
+                                                </h6>
                                             </div>
                                         </td>
                                         <td>
@@ -356,18 +334,42 @@ active
                                         </td>
                                         <td>
                                             @if ($pegawai->keterangan == "Hadir" && $pegawai->jam_masuk != null && $pegawai->jam_keluar == null)
-                                                <div class="mt-4">
+                                                <div>
                                                     <h4>
-                                                        <span class="badge text-white" style="margin-left: 20px; background-color: #47C363;">
+                                                        <span class="badge" style="width: 80px; border-radius: 10px; background-image : linear-gradient(0deg,  #ffffff 50%, #da4439 50%); border: solid 0.5px ;">
+                                                            <div class="row justify-content-center text-white">
+                                                                <h5>
+                                                                    {{date('d', strtotime($pegawai->tanggal))}}
+                                                                </h5>
+                                                            </div>
+                                                            <div class="row justify-content-center">
+                                                                <h6>
+                                                                    {{date('M Y', strtotime($pegawai->tanggal))}}
+                                                                </h6>
+                                                            </div>
+                                                        </span>
+                                                        <span class="badge text-white" style="margin-left: 160px; background-color: #47C363;">
                                                             <i class="far fa-clock"></i> Jam Masuk :
                                                             {{\Carbon\Carbon::createFromFormat('H:i:s',$pegawai->jam_masuk)->format('H:i')}}
                                                         </span>
                                                     </h4>
                                                 </div>
                                             @elseif ($pegawai->keterangan == "Hadir" && $pegawai->jam_masuk != null && $pegawai->jam_keluar != null)
-                                                <div class="mt-4">
+                                                <div>
                                                     <h4>
-                                                        <span class="badge text-white" style="margin-left: 20px; background-color: #47C363;">
+                                                        <span class="badge" style="width: 80px; border-radius: 10px; background-image : linear-gradient(0deg,  #ffffff 50%, #da4439 50%); border: solid 0.5px ;">
+                                                            <div class="row justify-content-center text-white">
+                                                                <h5>
+                                                                    {{date('d', strtotime($pegawai->tanggal))}}
+                                                                </h5>
+                                                            </div>
+                                                            <div class="row justify-content-center">
+                                                                <h6>
+                                                                    {{date('M Y', strtotime($pegawai->tanggal))}}
+                                                                </h6>
+                                                            </div>
+                                                        </span>
+                                                        <span class="badge text-white" style="margin-left: 160px; background-color: #47C363;">
                                                             <i class="far fa-clock"></i> Jam Masuk :
                                                             {{\Carbon\Carbon::createFromFormat('H:i:s',$pegawai->jam_masuk)->format('H:i')}}
                                                             <i class="fas fa-long-arrow-alt-right"></i> Jam Keluar :
@@ -376,14 +378,26 @@ active
                                                     </h4>
                                                 </div>
                                             @elseif ($pegawai->keterangan != "Hadir" && $pegawai->jam_masuk == "00:00:00" && $pegawai->jam_keluar == "00:00:00")
-                                                <div class="mt-4">
+                                                <div>
                                                     <h4>
+                                                        <span class="badge" style="width: 80px; border-radius: 10px; background-image : linear-gradient(0deg,  #ffffff 50%, #da4439 50%); border: solid 0.5px ;">
+                                                            <div class="row justify-content-center text-white">
+                                                                <h5>
+                                                                    {{date('d', strtotime($pegawai->tanggal))}}
+                                                                </h5>
+                                                            </div>
+                                                            <div class="row justify-content-center">
+                                                                <h6>
+                                                                    {{date('M Y', strtotime($pegawai->tanggal))}}
+                                                                </h6>
+                                                            </div>
+                                                        </span>
                                                         @if ($pegawai->keterangan == "Bolos")
-                                                            <span class="badge text-white" style="margin-left: 20px; background-color: #FC544B;">
+                                                            <span class="badge text-white" style="margin-left: 160px; background-color: #FC544B;">
                                                                 <i class="fas fa-pen"></i> {{$pegawai->keterangan}}
                                                             </span>
                                                         @elseif ($pegawai->keterangan != "Bolos" || $pegawai->keterangan != "Hadir")
-                                                            <span class="badge text-white" style="margin-left: 20px; background-color: #FFA426;">
+                                                            <span class="badge text-white" style="margin-left: 160px; background-color: #FFA426;">
                                                                 <i class="fas fa-pen"></i> {{$pegawai->keterangan}}
                                                             </span>
                                                         @endif
@@ -410,6 +424,7 @@ active
                                 </tbody>
                             </table>
                         </div>
+                        {{-- {{$data_presensi->links()}} --}}
 
 
                     </div>
@@ -463,7 +478,7 @@ active
                                         @endif
                                     </td>
                                     <td>
-                                        @if($pegawai->keterangan == null)
+                                        @if($pegawai->keterangan == "Hadir")
                                         {{$pegawai->catatan_masuk}}dan {{$pegawai->catatan_keluar}}
                                         @else
                                         Tidak hadir

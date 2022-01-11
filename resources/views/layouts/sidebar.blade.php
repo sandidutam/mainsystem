@@ -1,9 +1,9 @@
 <aside id="sidebar-wrapper">
     <div class="sidebar-brand">
-      <h3 class="mt-4"><a href="{{route('dashboard.index')}}">Main<span class="text-primary">2X</span></a></h3>
+      <h5 class="mt-4"><a href="{{route('dashboard.index')}}">ALKATA<br><span class="text-primary"><h6>KUSUMA JAYA</h6></span></a></h5>
     </div>
     <div class="sidebar-brand sidebar-brand-sm">
-      <a href="index.html">M<span class="text-primary">2X</span></a>
+      <a href="index.html">A<span class="text-primary">KJ</span></a>
     </div>
     <ul class="sidebar-menu">
         <li class="menu-header">Dashboard</li>

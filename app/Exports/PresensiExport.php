@@ -18,9 +18,19 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class PresensiExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSize, WithStyles, WithEvents
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+    // use Exportable;
+
+    // private $presensi;
+
+    // public function __construct(Presensi $presensi)
+    // {
+    //     $this->presensi = $presensi;
+    // }
+
+    // public function collection()
+    // {
+    //     return $this->presensi->items();
+    // }
 
     public function map($presensi): array
     {
@@ -29,14 +39,14 @@ class PresensiExport implements FromQuery, WithMapping, WithHeadings, ShouldAuto
         return [
             [
                 $presensi->tanggal,
+                $presensi->keterangan,
                 $presensi->pegawai->nomor_pegawai,
                 $presensi->pegawai->nama_lengkap(),
-                $presensi->jabatan,
+                $presensi->pegawai->jabatan,
                 $presensi->pegawai->sektor_area,
                 $presensi->jam_masuk,
                 $presensi->jam_keluar,
-                $presensi->catatan(),
-                $presensi->keterangan
+                $presensi->catatan()
             ]
         ];
     }
@@ -49,14 +59,14 @@ class PresensiExport implements FromQuery, WithMapping, WithHeadings, ShouldAuto
             ],
             [
                 'Tanggal',
+                'Keterangan',
                 'Nomor Pegawai',
                 'Nama Lengkap',
                 'Jabatan',
                 'Sektor',
                 'Jam Masuk',
                 'Jam Keluar',
-                'Catatan',
-                'Keterangan'
+                'Catatan'
             ]
          ];
     }
@@ -65,9 +75,8 @@ class PresensiExport implements FromQuery, WithMapping, WithHeadings, ShouldAuto
 
     public function query()
     {
-        return Presensi::query();
+        return Presensi::query()->whereHas('pegawai');
     }
-
 
 
     public function styles(Worksheet $sheet)

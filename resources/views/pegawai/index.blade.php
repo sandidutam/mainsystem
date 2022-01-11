@@ -321,20 +321,9 @@ active
                                                         </a>
                                                     </div>
                                                     <div class="row">
-                                                        @if ( $pegawai->presensi->pluck('keterangan')->implode(', ') == "Izin" || $pegawai->presensi->pluck('keterangan')->implode(', ') == "Cuti" || $pegawai->presensi->pluck('keterangan')->implode(', ') == "Sakit" )
-                                                            <h6>
-                                                                <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir -
-                                                                    <span class="text-warning">
-                                                                        {{$pegawai->presensi->pluck('keterangan')->implode(', ')}}
-                                                                    </span>
-                                                                </div>
-                                                            </h6>
-                                                        @else
-                                                            <h6>
-                                                                <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir - {{$pegawai->presensi->pluck('keterangan')->implode(', ')}}</div>
-                                                            </h6>
-                                                        @endif
-
+                                                        <h6>
+                                                            <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir</div>
+                                                        </h6>
                                                     </div>
                                                 </div>
                                             </td>
@@ -564,20 +553,9 @@ active
                                                         </a>
                                                     </div>
                                                     <div class="row">
-                                                        @if ( $pegawai->presensi->pluck('keterangan')->implode(', ') == "Izin" || $pegawai->presensi->pluck('keterangan')->implode(', ') == "Cuti" || $pegawai->presensi->pluck('keterangan')->implode(', ') == "Sakit" )
-                                                            <h6>
-                                                                <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir -
-                                                                    <span class="text-warning">
-                                                                        {{$pegawai->presensi->pluck('keterangan')->implode(', ')}}
-                                                                    </span>
-                                                                </div>
-                                                            </h6>
-                                                        @else
-                                                            <h6>
-                                                                <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir - {{$pegawai->presensi->pluck('keterangan')->implode(', ')}}</div>
-                                                            </h6>
-                                                        @endif
-
+                                                        <h6>
+                                                            <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir</div>
+                                                        </h6>
                                                     </div>
                                                 </div>
                                             </td>
@@ -807,20 +785,9 @@ active
                                                         </a>
                                                     </div>
                                                     <div class="row">
-                                                        @if ( $pegawai->presensi->pluck('keterangan')->implode(', ') == "Izin" || $pegawai->presensi->pluck('keterangan')->implode(', ') == "Cuti" || $pegawai->presensi->pluck('keterangan')->implode(', ') == "Sakit" )
-                                                            <h6>
-                                                                <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir -
-                                                                    <span class="text-warning">
-                                                                        {{$pegawai->presensi->pluck('keterangan')->implode(', ')}}
-                                                                    </span>
-                                                                </div>
-                                                            </h6>
-                                                        @else
-                                                            <h6>
-                                                                <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir - {{$pegawai->presensi->pluck('keterangan')->implode(', ')}}</div>
-                                                            </h6>
-                                                        @endif
-
+                                                        <h6>
+                                                            <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir</div>
+                                                        </h6>
                                                     </div>
                                                 </div>
                                             </td>
@@ -1051,20 +1018,9 @@ active
                                                         </a>
                                                     </div>
                                                     <div class="row">
-                                                        @if ( $pegawai->presensi->pluck('keterangan')->implode(', ') == "Izin" || $pegawai->presensi->pluck('keterangan')->implode(', ') == "Cuti" || $pegawai->presensi->pluck('keterangan')->implode(', ') == "Sakit" )
-                                                            <h6>
-                                                                <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir -
-                                                                    <span class="text-warning">
-                                                                        {{$pegawai->presensi->pluck('keterangan')->implode(', ')}}
-                                                                    </span>
-                                                                </div>
-                                                            </h6>
-                                                        @else
-                                                            <h6>
-                                                                <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir - {{$pegawai->presensi->pluck('keterangan')->implode(', ')}}</div>
-                                                            </h6>
-                                                        @endif
-
+                                                        <h6>
+                                                            <div class="text-danger text-small font-600-bold"><i class="fas fa-circle"></i> Tidak Hadir</div>
+                                                        </h6>
                                                     </div>
                                                 </div>
                                             </td>

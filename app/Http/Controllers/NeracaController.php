@@ -18,7 +18,7 @@ class NeracaController extends Controller
 {
     public function index()
     {
-        $neraca = Neraca::all();
+        $neraca = Neraca::orderBy('tanggal', 'DESC')->get();
         $riwayat = Neraca::orderBy('tanggal', 'DESC')->get();
         $sumneraca = Neraca::all()->count();
 
@@ -47,79 +47,135 @@ class NeracaController extends Controller
         $tahun = Carbon::now()->format('Y');
         $tahunkemarin = Carbon::now()->subYears(1)->format('Y');
 
-        $d1 = Neraca::where('bulan', '1')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d2 = Neraca::where('bulan', '2')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d3 = Neraca::where('bulan', '3')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d4 = Neraca::where('bulan', '4')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d5 = Neraca::where('bulan', '5')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d6 = Neraca::where('bulan', '6')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d7 = Neraca::where('bulan', '7')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d8 = Neraca::where('bulan', '8')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d9 = Neraca::where('bulan', '9')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d10 = Neraca::where('bulan', '10')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d11 = Neraca::where('bulan', '11')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
-        $d12 = Neraca::where('bulan', '12')->where('tahun', $tahun)->whereNotNull('debit')->sum('debit');
+        $monthname1 = Carbon::now()->subMonth(0)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname2 = Carbon::now()->subMonth(1)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname3 = Carbon::now()->subMonth(2)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname4 = Carbon::now()->subMonth(3)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname5 = Carbon::now()->subMonth(4)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname6 = Carbon::now()->subMonth(5)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname7 = Carbon::now()->subMonth(6)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname9 = Carbon::now()->subMonth(8)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname8 = Carbon::now()->subMonth(7)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname10 = Carbon::now()->subMonth(9)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname11 = Carbon::now()->subMonth(10)->timezone('Asia/Jakarta')->format('F Y');
+        $monthname12 = Carbon::now()->subMonth(11)->timezone('Asia/Jakarta')->format('F Y');
 
-        $k1 = Neraca::where('bulan', '1')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k2 = Neraca::where('bulan', '2')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k3 = Neraca::where('bulan', '3')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k4 = Neraca::where('bulan', '4')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k5 = Neraca::where('bulan', '5')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k6 = Neraca::where('bulan', '6')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k7 = Neraca::where('bulan', '7')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k8 = Neraca::where('bulan', '8')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k9 = Neraca::where('bulan', '9')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k10 = Neraca::where('bulan', '10')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k11 = Neraca::where('bulan', '11')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
-        $k12 = Neraca::where('bulan', '12')->where('tahun', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $month1 = Carbon::now()->subMonth(0)->timezone('Asia/Jakarta')->format('Y-m');
+        $month2 = Carbon::now()->subMonth(1)->timezone('Asia/Jakarta')->format('Y-m');
+        $month3 = Carbon::now()->subMonth(2)->timezone('Asia/Jakarta')->format('Y-m');
+        $month4 = Carbon::now()->subMonth(3)->timezone('Asia/Jakarta')->format('Y-m');
+        $month5 = Carbon::now()->subMonth(4)->timezone('Asia/Jakarta')->format('Y-m');
+        $month6 = Carbon::now()->subMonth(5)->timezone('Asia/Jakarta')->format('Y-m');
+        $month7 = Carbon::now()->subMonth(6)->timezone('Asia/Jakarta')->format('Y-m');
+        $month8 = Carbon::now()->subMonth(7)->timezone('Asia/Jakarta')->format('Y-m');
+        $month9 = Carbon::now()->subMonth(8)->timezone('Asia/Jakarta')->format('Y-m');
+        $month10 = Carbon::now()->subMonth(9)->timezone('Asia/Jakarta')->format('Y-m');
+        $month11 = Carbon::now()->subMonth(10)->timezone('Asia/Jakarta')->format('Y-m');
+        $month12 = Carbon::now()->subMonth(11)->timezone('Asia/Jakarta')->format('Y-m');
 
-        $lastyeartotalkredit = Neraca::where('tahun', $tahunkemarin)->whereNotNull('kredit')->sum('kredit');
-        $lastyeartotaldebit = Neraca::where('tahun', $tahunkemarin)->whereNotNull('debit')->sum('debit');
-        $lastyearbalance = $lastyeartotaldebit - $lastyeartotalkredit;
+        $monthcategories =       [
+            $monthname12,
+            $monthname11,
+            $monthname10,
+            $monthname9,
+            $monthname8,
+            $monthname7,
+            $monthname6,
+            $monthname5,
+            $monthname4,
+            $monthname3,
+            $monthname2,
+            $monthname1
+                            ];
+
+        $d1 = Neraca::where('bulan', $month1)->whereNotNull('debit')->sum('debit');
+        $d2 = Neraca::where('bulan', $month2)->whereNotNull('debit')->sum('debit');
+        $d3 = Neraca::where('bulan', $month3)->whereNotNull('debit')->sum('debit');
+        $d4 = Neraca::where('bulan', $month4)->whereNotNull('debit')->sum('debit');
+        $d5 = Neraca::where('bulan', $month5)->whereNotNull('debit')->sum('debit');
+        $d6 = Neraca::where('bulan', $month6)->whereNotNull('debit')->sum('debit');
+        $d7 = Neraca::where('bulan', $month7)->whereNotNull('debit')->sum('debit');
+        $d8 = Neraca::where('bulan', $month8)->whereNotNull('debit')->sum('debit');
+        $d9 = Neraca::where('bulan', $month9)->whereNotNull('debit')->sum('debit');
+        $d10 = Neraca::where('bulan', $month10)->whereNotNull('debit')->sum('debit');
+        $d11 = Neraca::where('bulan', $month11)->whereNotNull('debit')->sum('debit');
+        $d12 = Neraca::where('bulan', $month12)->whereNotNull('debit')->sum('debit');
+        $d13 = Neraca::where('bulan', '<', $month12)->whereNotNull('debit')->sum('debit');
+
+        $k1 = Neraca::where('bulan', $month1)->whereNotNull('kredit')->sum('kredit');
+        $k2 = Neraca::where('bulan', $month2)->whereNotNull('kredit')->sum('kredit');
+        $k3 = Neraca::where('bulan', $month3)->whereNotNull('kredit')->sum('kredit');
+        $k4 = Neraca::where('bulan', $month4)->whereNotNull('kredit')->sum('kredit');
+        $k5 = Neraca::where('bulan', $month5)->whereNotNull('kredit')->sum('kredit');
+        $k6 = Neraca::where('bulan', $month6)->whereNotNull('kredit')->sum('kredit');
+        $k7 = Neraca::where('bulan', $month7)->whereNotNull('kredit')->sum('kredit');
+        $k8 = Neraca::where('bulan', $month8)->whereNotNull('kredit')->sum('kredit');
+        $k9 = Neraca::where('bulan', $month9)->whereNotNull('kredit')->sum('kredit');
+        $k10 = Neraca::where('bulan', $month10)->whereNotNull('kredit')->sum('kredit');
+        $k11 = Neraca::where('bulan', $month11)->whereNotNull('kredit')->sum('kredit');
+        $k12 = Neraca::where('bulan', $month12)->whereNotNull('kredit')->sum('kredit');
+        $k13 = Neraca::where('bulan', '<', $month12)->whereNotNull('kredit')->sum('kredit');
+
+        $lastyeartotalkredit = Neraca::where('tahun', '!=', $tahun)->whereNotNull('kredit')->sum('kredit');
+        $lastyeartotaldebit = Neraca::where('tahun', '!=', $tahun)->whereNotNull('debit')->sum('debit');
+        $lastbalance = $d13 - $k13;
+
+        $balance12 = $lastbalance + $d12 - $k12 ;
+        $balance11 = $balance12 + $d11 - $k11 ;
+        $balance10 = $balance11 + $d10 - $k10 ;
+        $balance9 = $balance10 + $d9 - $k9 ;
+        $balance8 = $balance9 + $d8 - $k8 ;
+        $balance7 = $balance8 + $d7 - $k7 ;
+        $balance6 = $balance7 + $d6 - $k6 ;
+        $balance5 = $balance6 + $d5 - $k5 ;
+        $balance4 = $balance5 + $d4 - $k4 ;
+        $balance3 = $balance4 + $d3 - $k3 ;
+        $balance2 = $balance3 + $d2 - $k2 ;
+        $balance1 = $balance2 + $d1 - $k1;
 
         $databalance = [
-            $balance1 = $lastyearbalance + $d1 - $k1 ,
-            $balance2 = $balance1 + $d2 - $k2 ,
-            $balance3 = $balance2 + $d3 - $k3 ,
-            $balance4 = $balance3 + $d4 - $k4 ,
-            $balance5 = $balance4 + $d5 - $k5 ,
-            $balance6 = $balance5 + $d6 - $k6 ,
-            $balance7 = $balance6 + $d7 - $k7 ,
-            $balance8 = $balance7 + $d8 - $k8 ,
-            $balance9 = $balance8 + $d9 - $k9 ,
-            $balance10 = $balance9 + $d10 - $k10 ,
-            $balance11 = $balance10 + $d11 - $k11 ,
-            $balance12 = $balance11 + $d12 - $k12
+            $balance12 ,
+            $balance11 ,
+            $balance10 ,
+            $balance9 ,
+            $balance8 ,
+            $balance7 ,
+            $balance6 ,
+            $balance5 ,
+            $balance4 ,
+            $balance3 ,
+            $balance2 ,
+            $balance1
         ];
 
         $datadebit = [
-            $d1,
-            $d2,
-            $d3,
-            $d4,
-            $d5,
-            $d6,
-            $d7,
-            $d8,
-            $d9,
-            $d10,
+            $d12,
             $d11,
-            $d12
+            $d10,
+            $d9,
+            $d8,
+            $d7,
+            $d6,
+            $d5,
+            $d4,
+            $d3,
+            $d2,
+            $d1
         ];
 
         $datakredit = [
-            $k1,
-            $k2,
-            $k3,
-            $k4,
-            $k5,
-            $k6,
-            $k7,
-            $k8,
-            $k9,
-            $k10,
+            $k12,
             $k11,
-            $k12
+            $k10,
+            $k9,
+            $k8,
+            $k7,
+            $k6,
+            $k5,
+            $k4,
+            $k3,
+            $k2,
+            $k1,
         ];
 
         $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
@@ -135,7 +191,8 @@ class NeracaController extends Controller
                                             'sumneraca',
                                             'databalance',
                                             'datadebit',
-                                            'datakredit'
+                                            'datakredit',
+                                            'monthcategories'
                                             ));
     }
 
@@ -181,7 +238,7 @@ class NeracaController extends Controller
 
         $tgl_transaksi = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y-m-d');
         $tahun = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y');
-        $bulan = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('m');
+        $bulan = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y-m');
         $hari = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('d');
 
         if($request->filled('debit')) {

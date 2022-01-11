@@ -19,7 +19,8 @@
             <td style="width: 80px; font-size: 10px; border: 1px solid black">{{$n->deskripsi}}</td>
             <td style="font-size: 10px; border: 1px solid black; text-align: right;">{{number_format($n->debit, 2, ',', '.') }}</td>
             <td style="font-size: 10px; border: 1px solid black; text-align: right;">{{number_format($n->kredit, 2, ',', '.') }}</td>
-            <td style="font-size: 10px; border: 1px solid black">{{$n->formattanggal()}}</td>
+            <td style="font-size: 10px; border: 1px solid black">{{date('d F Y',strtotime($n->tanggal))}}</td>
+            {{-- {{date('H:i', strtotime($item->jam_masuk))}} --}}
         </tr>
         @endforeach
         <tr style="border: 1px solid black;">

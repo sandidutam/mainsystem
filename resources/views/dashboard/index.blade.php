@@ -300,8 +300,8 @@ active
         text: 'Data Tahun 2021'
     },
     xAxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        categories: {!! json_encode($monthcategories) !!},
+        crosshair: true
     },
     yAxis: {
         title: {

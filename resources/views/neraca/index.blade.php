@@ -158,20 +158,6 @@ active
                 </div>
             </div>
 
-            {{-- Alert Notification --}}
-
-            @if(session('notifikasi_sukses'))
-                <div class="alert alert-success alert-dismissible m-3 show fade" role="alert">
-                <div class="alert-body">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <i class="fas fa-check"></i>
-                    {{session('notifikasi_sukses')}}
-                </div>
-                </div>
-            @endif
-
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -426,8 +412,8 @@ active
             text: 'Data Tahun 2021'
         },
         xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        categories: {!! json_encode($monthcategories) !!},
+        crosshair: true
         },
         yAxis: {
             title: {

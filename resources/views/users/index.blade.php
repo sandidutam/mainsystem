@@ -117,10 +117,13 @@ active
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" class="btn btn-md btn-danger m-2"><i class="fas fa-trash mr-2"></i> Hapus</button>
                                 </form> --}}
+                                @if( $user->role == "SuperAdmin" )
 
-                                <button class="btn btn-md btn-danger m-2 delete" id_user="{{Crypt::encryptString($user->id)}}" nama_lengkap="{{$user->nama_lengkap()}}">
-                                    <i class="fas fa-trash mr-2"></i> Hapus
-                                </button>
+                                @else
+                                    <button class="btn btn-md btn-danger m-2 delete" id_user="{{Crypt::encryptString($user->id)}}" nama_lengkap="{{$user->nama_lengkap()}}">
+                                        <i class="fas fa-trash mr-2"></i> Hapus
+                                    </button>
+                                @endif
 
                                 </div>
                             </td>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use PDF;
 use Carbon\Carbon;
 use App\Models\Pegawai;
@@ -16,11 +17,6 @@ use Illuminate\Support\Facades\Validator;
 
 class PresensiController extends Controller
 {
-   /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function indexIn(Request $request)
     {
 
@@ -101,11 +97,8 @@ class PresensiController extends Controller
 
         $id_pegawai = Crypt::decryptString($id);
 
-        // return $id_pegawai;
 
         $data_presensi = Presensi::where('tanggal', '=', $today)->where('pegawai_id', '=', $id_pegawai)->first();
-
-        // return $data_presensi;
 
         // $data_presensi = Presensi::whereHas('pegawai', function ($query) {
         //     $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
@@ -113,14 +106,20 @@ class PresensiController extends Controller
         //     ->where('pegawai_id', '=', $id_pegawai);
         //     })->with('pegawai')->get();
 
-        // return $data_presensi;
-
         return view ('presensi.checkout',compact('data_presensi','today'));
     }
 
     public function history()
     {
-        $data_presensi = Presensi::orderBy('updated_at','DESC')->get();
+        // $data_presensi = Presensi::orderBy('updated_at','DESC')->paginate(10);
+        // $data_presensi = Presensi::orderBy('tanggal','DESC')->get();
+        $data_presensi = Presensi::orderBy('updated_at','DESC')->whereHas('pegawai')->get();
+
+        // $data_presensi = Presensi::orderBy('updated_at','DESC')->get()->groupBy(function($item) {
+        //     return $item->created_at->format('d F Y');
+        // });
+
+        // dd($data_presensi);
 
         $today = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d');
         $kemarin = Carbon::yesterday()->timezone('Asia/Jakarta')->format('Y-m-d');
@@ -359,7 +358,7 @@ class PresensiController extends Controller
 
     public function activity()
     {
-        $data_presensi = Presensi::orderBy('updated_at','DESC')->get()->groupBy(function($item) {
+        $data_presensi = Presensi::orderBy('updated_at','DESC')->whereHas('pegawai')->get()->groupBy(function($item) {
             return $item->created_at->format('d F Y');
         });
 
@@ -411,7 +410,6 @@ class PresensiController extends Controller
 
         // $time > $batas_awal_waktu_keluar && $time < $batas_akhir_waktu_keluar
 
-
         $check_date = Presensi::where('tanggal','=',$current_time)->count();
 
         $presensi = new Presensi();
@@ -427,7 +425,10 @@ class PresensiController extends Controller
                                     ->count();
 
             if ($check_for_double > 0) {
-                return redirect()->route('presensi.history')->with('notifikasi_gagal','Pegawai hanya bisa absen masuk sekali dalam sehari !');
+
+                Alert::error('Presensi Gagal', 'Pegawai hanya bisa presensi masuk sekali dalam sehari !');
+
+                return redirect()->intended('/presensi/riwayat');
             }
 
             if( $today )
@@ -441,7 +442,9 @@ class PresensiController extends Controller
                     $note = 'Datang Telat ';
                 } else
                 {
-                    return redirect('/presensi/riwayat')->with('notifikasi_gagal','Belum bisa absen');
+                    Alert::error('Presensi Gagal', 'Presensi masuk hanya bisa dilakukan setelah pukul'.$batas_awal_waktu_masuk.' WIB!');
+
+                    return redirect()->intended('/presensi/riwayat');
                 }
                 $nama = $request->nama_lengkap;
                 $presensi->pegawai_id = $request->id;
@@ -461,10 +464,14 @@ class PresensiController extends Controller
 
                 if( $simpan )
                 {
-                    return redirect('/presensi/riwayat')->with('notifikasi_sukses', $nama.' sudah datang !');
+                    Alert::success('Presensi Berhasil', $nama.' sudah datang !');
+
+                    return redirect()->intended('/presensi/riwayat');
                 }
             } else {
-                return redirect('/presensi/riwayat')->with('notifikasi_gagal','Pegawai hanya bisa absen masuk sekali dalam sehari !');
+                Alert::error('Presesi Gagal', 'Pegawai hanya bisa presensi masuk sekali dalam sehari !');
+
+                return redirect()->intended('/presensi/riwayat');
             }
         }
 
@@ -479,6 +486,9 @@ class PresensiController extends Controller
             ]);
 
             if($validator->fails()) {
+
+                Alert::error('Presesi Gagal', "Kolom 'Keterangan' wajib diisi apabila ingin absen!");
+
                 return redirect()->route('presensi.checkin', Crypt::encryptString($data_pegawai->id))
                                     ->withErrors($validator)
                                     ->withInput();
@@ -490,10 +500,10 @@ class PresensiController extends Controller
 
             $presensi->pegawai_id = $request->id;
             $presensi->tanggal = $today;
-            $presensi->jam_masuk = "-";
+            $presensi->jam_masuk = "00:00:00";
             $presensi->catatan_masuk = "-";
             $presensi->catatan_keluar = "-";
-            $presensi->jam_keluar = "-";
+            $presensi->jam_keluar = "00:00:00";
             $presensi->keterangan = $request->keterangan;
 
             $id_peg = $request->id;
@@ -507,7 +517,9 @@ class PresensiController extends Controller
 
             if( $simpan )
             {
-                return redirect()->route('presensi.history')->with('notifikasi_tidak_masuk', $nama." hari ini ".$ket );
+                Alert::success('Absen Berhasil', $nama." hari ini ".$ket );
+
+                return redirect()->intended('/presensi/riwayat');
             }
 
         } else {
@@ -515,18 +527,6 @@ class PresensiController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $data_pegawai = Pegawai::find($id);
@@ -534,13 +534,6 @@ class PresensiController extends Controller
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
 
@@ -567,7 +560,9 @@ class PresensiController extends Controller
             // return $check_for_double;
 
             if ($check_for_double > 0 ) {
-                return redirect()->route('presensi.history')->with('notifikasi_gagal','Pegawai hanya bisa absen keluar sekali dalam sehari !');
+                Alert::error('Presensi Gagal','Pegawai hanya bisa presensi keluar sekali dalam sehari !' );
+
+                return redirect()->intended('/presensi/riwayat');
             }
 
                 if( $check_time < $batas_awal_waktu_keluar)
@@ -586,6 +581,7 @@ class PresensiController extends Controller
                 $presensi->catatan_keluar = $note;
 
                 $id_peg = $request->id;
+
                 $find_pegawai = Pegawai::find($id_peg);
                 $find_pegawai->status ="Sudah Pulang";
                 $find_pegawai->update();
@@ -594,7 +590,9 @@ class PresensiController extends Controller
 
                 if( $simpan )
                 {
-                    return redirect('/presensi/riwayat')->with('notifikasi_sukses', $nama.' sudah pulang !');
+                    Alert::success('Presensi Berhasil', $nama.' sudah pulang !' );
+
+                    return redirect()->intended('/presensi/riwayat');
                 }
         }
 
@@ -633,7 +631,11 @@ class PresensiController extends Controller
                                         ]);
         }
 
-        return redirect()->intended('/presensi/riwayat')->with('notifikasi_sukses', 'Sudah di catat Bolos!');
+
+        Alert::success('Presensi Berhasil', 'Yang tidak hadir hari ini di catat Bolos!' );
+
+        return redirect()->intended('/presensi/riwayat');
+
     }
 
 
@@ -641,7 +643,9 @@ class PresensiController extends Controller
     {
         $data_presensi = Presensi::findOrFail($id);
         $data_presensi->delete();
-        return redirect()->route('presensi.history')->with('notifikasi_delete','Data sudah dihapus !');
+        Alert::success('Presensi Berhasil', 'Data Presensi sudah dihapus!' );
+
+        return redirect()->intended('/presensi/riwayat');
     }
 
     public function exportExcel()
@@ -652,7 +656,7 @@ class PresensiController extends Controller
 
     public function exportPdf()
     {
-        $presensi = Presensi::all();
+        $presensi = Presensi::whereHas('Pegawai')->get();
         $pdf = PDF::loadView('export.presensi.presensipdf',[ 'presensi' => $presensi]);
         return $pdf->download('presensi.pdf');
     }

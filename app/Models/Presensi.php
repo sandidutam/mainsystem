@@ -24,6 +24,8 @@ class Presensi extends Model
             'keterangan'
     ];
 
+    // protected $dates = ['tanggal'];
+
     /**
      * Get the pegawai that owns the Presensi
      *
@@ -44,7 +46,6 @@ class Presensi extends Model
     {
         return $this->catatan_masuk.' '.$this->catatan_keluar;
     }
-
 
     /**
      * Get the user that owns the Presensi

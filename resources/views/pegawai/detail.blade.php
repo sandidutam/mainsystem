@@ -95,13 +95,16 @@ active
 
                             <div class="row">
                                 <div class="col d-flex justify-content-center">
-                                    <a href="{{ route('presensi.checkin', $data_pegawai->id) }}" class="btn btn-sm btn-success" type="button">Presensi Masuk</a>
+                                    <a href="{{ route('presensi.checkin', Crypt::encryptString($data_pegawai->id)) }}" class="btn btn-sm btn-success" type="button">Presensi Masuk</a>
                                 </div>
                                 @foreach ($data_presensi as $pegawai)
                                 <div class="col d-flex justify-content-center">
-                                    <a href="{{ route('presensi.checkout', $pegawai->id) }}" class="btn btn-sm btn-warning" type="button">Presensi Keluar</a>
+                                    <a href="{{ route('presensi.checkout', Crypt::encryptString($pegawai->id)) }}" class="btn btn-sm btn-warning" type="button">Presensi Keluar</a>
                                 </div>
                                 @endforeach
+                                {{-- <div class="col d-flex justify-content-center">
+                                    <a href="{{ route('presensi.checkout', Crypt::encryptString($data_presensi->id)) }}" class="btn btn-sm btn-warning" type="button">Presensi Keluar</a>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
