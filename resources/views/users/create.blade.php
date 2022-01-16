@@ -105,6 +105,20 @@ active
                                     <div class="form-group {{$errors->has('role') ? 'has-error' : ''}}">
                                         <label for="role" > Role : </label>
                                         <select name="role" class="form-control" id="role">
+                                            @foreach ($role as $item)
+                                                <option selected="true" style='display: none' value="">Pilih</option>
+                                                <option value="{{ $item->nama_role }}">{{ $item->nama_role }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('role'))
+                                            <span class="help-block text-danger">{{$errors->first('role')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{-- <div class="col-12 col-md-6 col-lg-6">
+                                    <div class="form-group {{$errors->has('role') ? 'has-error' : ''}}">
+                                        <label for="role" > Role : </label>
+                                        <select name="role" class="form-control" id="role">
                                         <option selected="true" style='display: none' value="">Pilih</option>
                                         <option {{(old('role')=="SuperAdmin")? 'selected':''}} value="SuperAdmin">SuperAdmin</option>
                                         <option {{(old('role')=="Admin")? 'selected':''}} value="Admin">Admin</option>
@@ -115,7 +129,7 @@ active
                                         <span class="help-block text-danger">{{$errors->first('role')}}</span>
                                         @endif
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <div class="form-group  {{$errors->has('jabatan') ? 'has-error' : ''}}">
                                         <label for="jabatan" > Jabatan : </label>

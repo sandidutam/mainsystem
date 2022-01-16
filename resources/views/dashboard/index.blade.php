@@ -281,6 +281,91 @@ active
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Role</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{route('new.role')}}" method="POST">
+                            @csrf
+                            <div class="section-title mt-1 mb-4"><h5>Buat Role Baru</h5></div>
+
+                            <div class="form-group {{$errors->has('nama_role') ? 'has-error' : ''}} ">
+                                <label for="nama_role" class="form-label"> Nama Role : </label>
+                                <input type="text" class="form-control" name="nama_role" id="nama_role" placeholder="Isi Nama Role" value="{{old('nama_role')}}">
+                                <span class="text-danger"><strong><em>*Wajib diisi!</em></strong></span>
+                                @if($errors->has('nama_role'))
+                                    <span class="help-block text-danger">{{$errors->first('nama_role')}}</span>
+                                @endif
+                            </div>
+
+                            <div class="form-group mb-2 {{$errors->has('deskripsi') ? 'has-error' : ''}} ">
+                                <label for="deskripsi"> Deskripsi Role : </label>
+                                <textarea name="deskripsi" class="form-control" placeholder="Isikan deskripsi Role" id="deskripsi" rows="2">{{old('deskripsi')}}</textarea>
+                                @if($errors->has('deskripsi'))
+                                    <span class="help-block text-danger">{{$errors->first('deskripsi')}}</span>
+                                @endif
+                            </div>
+
+                            <button type="submit" class="btn btn-lg btn-primary mt-4 mb-4">Submit</button>
+                        </form>
+
+                        <div class="row mt-4">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped" id="table-1" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Role</th>
+                                            <th>Deskripsi Role</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i = 1; ?>
+                                        @forelse( $role as $item)
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td>{{$item->nama_role}}</td>
+                                            <td>{{$item->deskripsi}}</td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <form action="{{ route('destroy.role', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php $i++; ?>
+                                        @empty
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Sektor</h4>
+                    </div>
+                    <div class="card-body">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi odit eaque nobis et officia assumenda vitae velit quisquam. Quam incidunt laboriosam quae quaerat autem facilis!
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </section>
 

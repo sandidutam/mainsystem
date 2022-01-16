@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Alert;
 use App\Models\Pegawai;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Sektor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -47,8 +49,9 @@ class UserController extends Controller
 
 
         $data_pegawai = Pegawai::all();
+        $role = Role::all();
 
-        return view('users.create',compact('data_pegawai'));
+        return view('users.create',compact('data_pegawai','role'));
     }
 
     /**
@@ -118,9 +121,9 @@ class UserController extends Controller
         $id_user = Crypt::decryptString($id);
 
         $data_user = User::find($id_user);
+        $role = Role::all();
 
-
-        return view ('users.detail', compact('data_user'));
+        return view ('users.detail', compact('data_user','role'));
     }
 
     /**

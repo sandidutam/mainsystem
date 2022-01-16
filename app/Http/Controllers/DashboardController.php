@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Role;
 use App\Models\Neraca;
+use App\Models\Sektor;
 use App\Models\Pegawai;
 use App\Models\Presensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class DashboardController extends Controller
 {
@@ -327,6 +331,7 @@ class DashboardController extends Controller
         $jml_s3 = Pegawai::where('sektor_area','3')->count();
         $jml_s4 = Pegawai::where('sektor_area','4')->count();
 
+        $role = Role::all();
 
         return view('dashboard.index', compact ('categories',
                                                 'monthcategories',
@@ -350,7 +355,49 @@ class DashboardController extends Controller
                                                 'jml_s1',
                                                 'jml_s2',
                                                 'jml_s3',
-                                                'jml_s4'
+                                                'jml_s4',
+                                                'role'
                                                 ));
+    }
+
+    public function storeRole(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_role',
+        ]);
+
+        if($validator->fails()) {
+            return redirect()->route('dashboard.index')
+                                ->withErrors($validator)
+                                ->withInput();
+        }
+
+        $new_role = new Role();
+
+        $new_role->nama_role = $request->nama_role;
+        $new_role->deskripsi = $request->deskripsi;
+        $new_role->save();
+
+        Alert::success('Input Data Role Berhasil', 'Data '.$new_role->nama_role.' sudah berhasil diinput!');
+
+        return redirect()->intended('/');
+    }
+
+    public function storeSektor(Request $request)
+    {
+        # code...
+    }
+
+    public function destroyRole($id)
+    {
+        // $id_user = Crypt::decryptString($id);
+
+        $role = Role::find($id);
+        $role_name = $role->nama_role;
+
+        Alert::success('Hapus Role Berhasil', 'Data '.$role_name.' sudah berhasil dihapus!');
+
+        $role->delete();
+        return redirect()->intended('/');
     }
 }

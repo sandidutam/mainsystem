@@ -67,7 +67,8 @@ Route::middleware(['auth', 'CheckRole:SuperAdmin'])->group(function () {
     Route::put('/user/{id}/update','UserController@update')->name('user.update');
     Route::get('/user/{id}/destroy', 'UserController@destroy')->name('user.destroy');
     Route::post('/pegawai/resetstatus', 'PegawaiController@resetStatus')->name('pegawai.reset_status');
-
+    Route::post('/newrole', 'DashboardController@storeRole')->name('new.role');
+    Route::delete('/role/{id}/destroy', 'DashboardController@destroyRole')->name('destroy.role');
 });
 
 Route::middleware(['auth', 'CheckRole:SuperAdmin,Admin,Akuntan'])->group(function () {
