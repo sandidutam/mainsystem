@@ -22,61 +22,6 @@ active
     <div class="section-body">
         {{-- Kartu Informasi Transaksi --}}
         <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-primary card-statistic-1">
-                    <div class="card-icon bg-primary text-white">
-                        <h2 class="mt-3">
-                            {{-- <i class="far fa-calendar-alt"></i> --}}
-                            {{date('d', strtotime($today))}}
-                            <span><h6>{{date('M Y', strtotime($today))}}</h6></span>
-
-                        </h2>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-                            Update terakhir
-                        </div>
-                        <div class="card-body">
-                            {{$sumneraca}} Transaksi
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-success card-statistic-1">
-                    <div class="card-icon bg-success text-white">
-                        <h2 class="mt-3">
-                            <i class="fas fa-plus"></i>
-                        </h2>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-                            Total Debit
-                        </div>
-                        <div class="card-body">
-                            Rp {{number_format($sumdebit, 2, ',', '.') }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-danger card-statistic-1">
-                    <div class="card-icon bg-danger text-white">
-                        <h2 class="mt-3">
-                            <i class="fas fa-minus"></i>
-                        </h2>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-                            Total Kredit
-                        </div>
-                        <div class="card-body">
-                            Rp {{number_format($sumkredit, 2, ',', '.') }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             @if( $balance > 0 )
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-success card-statistic-1">
@@ -90,7 +35,7 @@ active
                                 Saldo
                             </div>
                             <div class="card-body text-success">
-                                Rp {{number_format($balance, 2, ',', '.') }}
+                                Rp {{number_format($balance, 2, ',', '.') }} <i class="fas fa-arrow-circle-up" style="color: green"></i>
                             </div>
                         </div>
                     </div>
@@ -108,149 +53,59 @@ active
                                 Saldo
                             </div>
                             <div class="card-body text-danger">
-                                Rp {{number_format($balance, 2, ',', '.') }}
+                                Rp {{number_format($balance, 2, ',', '.') }} <i class="fas fa-arrow-circle-down" style="color: red"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             @endif
-        </div>
-
-        {{-- Informasi Jumlah Pegawai --}}
-        <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-success card-statistic-1">
-                    <div class="card-icon bg-success text-white">
-                        <h2 class="mt-3">
-                            {{$jml_s1}} <span><h6>Orang</h6></span>
-                        </h2>
+                <div class="card card-dark card-statistic-1">
+                    <div class="card-icon bg-dark text-white">
+                        <i class="fas fa-user-friends"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
-
+                            Jumlah Pegawai
                         </div>
                         <div class="card-body">
-                            Jumlah Pegawai Sektor 1
+                            {{$jml_pegawai}} <span>Orang</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-success card-statistic-1">
-                    <div class="card-icon bg-success text-white">
-                        <h2 class="mt-3">
-                            {{$jml_s2}} <span><h6>Orang</h6></span>
-                        </h2>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-
-                        </div>
-                        <div class="card-body">
-                            Jumlah Pegawai Sektor 2
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-success card-statistic-1">
-                    <div class="card-icon bg-success text-white">
-                        <h2 class="mt-3">
-                            {{$jml_s3}} <span><h6>Orang</h6></span>
-                        </h2>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-
-                        </div>
-                        <div class="card-body">
-                            Jumlah Pegawai Sektor 3
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-success card-statistic-1">
-                    <div class="card-icon bg-success text-white">
-                        <h2 class="mt-3">
-                            {{$jml_s4}} <span><h6>Orang</h6></span>
-                        </h2>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-
-                        </div>
-                        <div class="card-body">
-                            Jumlah Pegawai Sektor 4
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Kartu Informasi Absen Hari Ini --}}
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
-                    <div class="card-icon bg-primary">
-                    <i class="far fa-user"></i>
+                <div class="card card-warning card-statistic-1">
+                    <div class="card-icon bg-warning">
+                        <i class="fas fa-ban"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
                             <h4>Belum Hadir</h4>
                         </div>
-                        <div class="card-body mb-5">
+                        <div class="card-body">
                             {{$belum_hadir}}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
+                <div class="card card-success card-statistic-1">
                     <div class="card-icon bg-success">
-                    <i class="far fa-user"></i>
+                        <i class="fas fa-user-check"></i>
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
                             <h4>Sudah Hadir</h4>
                         </div>
-                        <div class="card-body mb-5">
+                        <div class="card-body">
                             {{$jml_hadir}}
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
-                    <div class="card-icon bg-danger">
-                    <i class="far fa-user"></i>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-                            <h4>Absen/Bolos</h4>
-                        </div>
-                        <div class="card-body mb-5">
-                            {{$jml_bolos}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
-                    <div class="card-icon bg-warning">
-                    <i class="far fa-user"></i>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card-header">
-                            <h4>Izin/Cuti/Sakit</h4>
-                        </div>
-                        <div class="card-body mb-5">
-                            {{$izin}}
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+
 
 
         {{-- Diagram Grafik Presensi dan Neraca --}}
@@ -275,6 +130,200 @@ active
                     <div class="card-body">
                         <div id="presensiChart">
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4>Manajemen Lokasi Penempatan dan Sektor</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <form action="{{route('new.penempatan')}}" method="POST">
+                            @csrf
+                            <div class="section-title mt-1 mb-4"><h5>Buat Lokasi Baru</h5></div>
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <div class="form-group {{$errors->has('nama_lokasi') ? 'has-error' : ''}} ">
+                                        <label for="nama_lokasi" class="form-label"> Nama Lokasi Penempatan <span class="text-danger"><strong><em>*</em></strong></span> </label>
+                                        <input type="text" class="form-control" name="nama_lokasi" id="nama_lokasi" placeholder="Isi Nama Lokasi" value="{{old('nama_lokasi')}}" style="text-transform:uppercase" autocomplete="off">
+                                        @if($errors->has('nama_lokasi'))
+                                            <span class="help-block text-danger">{{$errors->first('nama_lokasi')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <div class="form-group {{$errors->has('tanggal') ? 'has-error' : ''}} ">
+                                        <label for="tanggal" class="form-label"> Tanggal Didirikan <span class="text-danger"><strong><em>*</em></strong></span> </label>
+                                        <input type="text" autocomplete="off" class="datepicker form-control" name="tanggal" id="tanggal" placeholder="01/01/1970" value="{{old('tanggal')}}" autocomplete="off">
+                                        @if($errors->has('tanggal'))
+                                            <span class="help-block text-danger">{{$errors->first('tanggal')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <div class="form-group {{$errors->has('kota') ? 'has-error' : ''}} ">
+                                        <label for="kota" class="form-label"> Kota <span class="text-danger"><strong><em>*</em></strong></span> </label>
+                                        <input type="text" class="form-control" name="kota" id="kota" placeholder="Isi Kota" value="{{old('kota')}}" style="text-transform:uppercase" autocomplete="off">
+                                        @if($errors->has('kota'))
+                                            <span class="help-block text-danger">{{$errors->first('kota')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <div class="form-group {{$errors->has('provinsi') ? 'has-error' : ''}} ">
+                                        <label for="provinsi" class="form-label"> Provinsi <span class="text-danger"><strong><em>*</em></strong></span> </label>
+                                        <input type="text" class="form-control" name="provinsi" id="provinsi" placeholder="Isi Provinsi" value="{{old('provinsi')}}" style="text-transform:uppercase" autocomplete="off">
+                                        @if($errors->has('provinsi'))
+                                            <span class="help-block text-danger">{{$errors->first('provinsi')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="text-danger"><strong><em>*Wajib diisi!</em></strong></span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-lg btn-primary mt-4 mb-4">Submit</button>
+                        </form>
+
+                        <div class="row mt-4">
+                            <div class="table-responsive mx-4">
+                                <table class="table table-hover table-striped" id="table-1" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Lokasi</th>
+                                            <th>Nama</th>
+                                            <th>Lokasi</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i = 1; ?>
+                                        @forelse( $penempatan as $item)
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td>{{$item->kode_lokasi}}</td>
+                                            <td>{{$item->nama_lokasi}}</td>
+                                            <td>{{$item->kota}}, {{$item->provinsi}}</td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <form action="{{ route('destroy.role', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php $i++; ?>
+                                        @empty
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <form action="{{route('new.sektor')}}" method="POST">
+                            @csrf
+                            <div class="section-title mt-1 mb-4"><h5>Buat Sektor Baru</h5></div>
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <div class="form-group {{$errors->has('nama_sektor') ? 'has-error' : ''}} ">
+                                        <label for="nama_sektor" class="form-label"> Nama Sektor <span class="text-danger"><strong><em>*</em></strong></span> </label>
+                                        <input type="text" class="form-control" name="nama_sektor" id="nama_sektor" placeholder="Isi Nama Sektor" value="{{old('nama_sektor')}}" style="text-transform:uppercase" autocomplete="off">
+                                        @if($errors->has('nama_sektor'))
+                                            <span class="help-block text-danger">{{$errors->first('nama_sektor')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <div class="form-group {{$errors->has('penempatan') ? 'has-error' : ''}}">
+                                        <label for="penempatan" > Lokasi Penempatan <span class="text-danger"><strong><em>*</em></strong></span> </label>
+                                        <select name="penempatan" class="form-control" id="penempatan">
+                                            @foreach ($penempatan as $item)
+                                                <option selected="true" style='display: none' value="">Pilih</option>
+                                                <option value="{{ $item->id }}">{{ $item->nama_lokasi }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('penempatan'))
+                                            <span class="help-block text-danger">{{$errors->first('penempatan')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <div class="form-group {{$errors->has('tanggal') ? 'has-error' : ''}} ">
+                                        <label for="tanggal" class="form-label"> Tanggal Ditetapkan <span class="text-danger"><strong><em>*</em></strong></span> </label>
+                                        <input type="text" autocomplete="off" class="datepicker form-control" name="tanggal" id="tanggal" placeholder="01/01/1970" value="{{old('tanggal')}}" autocomplete="off">
+                                        @if($errors->has('tanggal'))
+                                            <span class="help-block text-danger">{{$errors->first('tanggal')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <span class="text-danger"><strong><em>*Wajib diisi!</em></strong></span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-lg btn-primary mt-4 mb-4">Submit</button>
+                        </form>
+
+                        <div class="row mt-4">
+                            <div class="table-responsive mx-4">
+                                <table class="table table-hover table-striped" id="table-2" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Sektor</th>
+                                            <th>Nama Sektor</th>
+                                            <th>Lokasi Sektor</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i = 1; ?>
+                                        @forelse( $sektor as $item)
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td>{{$item->kode_sektor}}</td>
+                                            <td>{{$item->nama_sektor}}</td>
+                                            <td>{{$item->penempatan->nama_lokasi}}</td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <form action="{{ route('destroy.role', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php $i++; ?>
+                                        @empty
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -348,30 +397,35 @@ active
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Sektor</h4>
-                    </div>
-                    <div class="card-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi odit eaque nobis et officia assumenda vitae velit quisquam. Quam incidunt laboriosam quae quaerat autem facilis!
-                    </div>
-                </div>
-            </div>
-
         </div>
 
     </div>
+
+    <script type="text/javascript">
+        $('.datepicker').datepicker({
+           format: 'yyyy-mm-dd'
+         });
+
+         $(function(){
+            $('.noblank').bind('input', function(){
+                $(this).val(function(_, v){
+                return v.replace(/\s+/g, '');
+                });
+            });
+            });
+    </script>
+
+
 </section>
 
 @endsection
 
 @section('footer')
+
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
 <script>
     Highcharts.chart('neracaChart', {

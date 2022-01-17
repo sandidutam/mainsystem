@@ -7,6 +7,7 @@ use App\Models\Neraca;
 use App\Models\Sektor;
 use App\Models\Pegawai;
 use App\Models\Presensi;
+use App\Models\Penempatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -332,6 +333,8 @@ class DashboardController extends Controller
         $jml_s4 = Pegawai::where('sektor_area','4')->count();
 
         $role = Role::all();
+        $penempatan = Penempatan::all();
+        $sektor = Sektor::all();
 
         return view('dashboard.index', compact ('categories',
                                                 'monthcategories',
@@ -356,14 +359,85 @@ class DashboardController extends Controller
                                                 'jml_s2',
                                                 'jml_s3',
                                                 'jml_s4',
-                                                'role'
+                                                'jml_pegawai',
+                                                'role',
+                                                'penempatan',
+                                                'sektor'
                                                 ));
+    }
+
+    public function storePenempatan(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_lokasi' => 'required',
+            'tanggal' => 'required',
+            'kota' => 'required',
+            'provinsi' => 'required'
+        ]);
+
+        if($validator->fails()) {
+            return redirect()->route('dashboard.index')
+                                ->withErrors($validator)
+                                ->withInput();
+        }
+
+        $id = Penempatan::getId();
+        $index = Penempatan::all();
+
+        if($index->isEmpty()) {
+
+            $idbaru = 0;
+            $kode_kota = strtoupper(str_replace(' ', '', $request->kota));
+            $kode_provinsi = strtoupper(str_replace(' ', '', $request->provinsi));
+
+
+            $tanggal = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y'.'m');
+            $kode_lokasi = 'LP/'.$tanggal.'/'.$kode_kota.'/'.$kode_provinsi.'/'.str_pad($idbaru+1, 4, '0', STR_PAD_LEFT);
+
+        } else {
+            foreach ($id as $value);
+            $idlama = $value->id;
+            $idbaru = $idlama + 1;
+            $kode_kota = strtoupper(str_replace(' ', '', $request->kota));
+            $kode_provinsi = strtoupper(str_replace(' ', '', $request->provinsi));
+
+            $tanggal = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y'.'m');
+            $kode_lokasi = 'LP/'.$tanggal.'/'.$kode_kota.'/'.$kode_provinsi.'/'.str_pad($idbaru, 4, '0', STR_PAD_LEFT);
+        }
+
+        $new_penempatan = new Penempatan();
+
+        $new_penempatan->kode_lokasi = $kode_lokasi;
+        $new_penempatan->nama_lokasi = strtoupper($request->nama_lokasi);
+        $new_penempatan->kota = strtoupper($request->kota);
+        $new_penempatan->provinsi = strtoupper($request->provinsi);
+
+        // dd($request->all());
+
+        $new_penempatan->save();
+
+        Alert::success('Input Lokasi Penempatan Berhasil', 'Data '.$new_penempatan->nama_lokasi.' sudah berhasil diinput!');
+
+        return redirect()->intended('/');
+    }
+
+    public function destroyPenempatan($id)
+    {
+        // $id_user = Crypt::decryptString($id);
+
+        $location = Penempatan::find($id);
+        $location_name = $location->nama_lokasi;
+
+        Alert::success('Hapus Lokasi Penempatan Berhasil', 'Data '.$location_name.' sudah berhasil dihapus!');
+
+        $role->delete();
+        return redirect()->intended('/');
     }
 
     public function storeRole(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama_role',
+            'nama_role' => 'required',
         ]);
 
         if($validator->fails()) {
@@ -383,11 +457,6 @@ class DashboardController extends Controller
         return redirect()->intended('/');
     }
 
-    public function storeSektor(Request $request)
-    {
-        # code...
-    }
-
     public function destroyRole($id)
     {
         // $id_user = Crypt::decryptString($id);
@@ -400,4 +469,66 @@ class DashboardController extends Controller
         $role->delete();
         return redirect()->intended('/');
     }
+
+    public function storeSektor(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_sektor' => 'required',
+            'penempatan' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            return redirect()->route('dashboard.index')
+                                ->withErrors($validator)
+                                ->withInput();
+        }
+
+        $id = Sektor::getId();
+        $index = Sektor::all();
+
+        if($index->isEmpty()) {
+
+            $idbaru = 0;
+
+            $tanggal = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y'.'m');
+            $kode_sektor = 'SAK/'.$tanggal.'/'.$request->penempatan.'/'.str_pad($idbaru+1, 4, '0', STR_PAD_LEFT);
+
+        } else {
+            foreach ($id as $value);
+            $idlama = $value->id;
+            $idbaru = $idlama + 1;
+
+            $tanggal = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y'.'m');
+            $kode_sektor = 'SAK/'.$tanggal.'/'.$request->penempatan.'/'.str_pad($idbaru, 4, '0', STR_PAD_LEFT);
+        }
+
+        $new_sektor = new Sektor();
+
+        $new_sektor->penempatan_id = $request->penempatan;
+        $new_sektor->kode_sektor = $kode_sektor;
+        $new_sektor->nama_sektor = strtoupper($request->nama_sektor);
+
+        // dd($request->all());
+
+        $new_sektor->save();
+
+        Alert::success('Input Sektor Berhasil', 'Data '.$new_sektor->nama_sektor.' sudah berhasil diinput!');
+
+        return redirect()->intended('/');
+    }
+
+    public function destroySektor($id)
+    {
+        // $id_user = Crypt::decryptString($id);
+
+        $sektor = Sektor::find($id);
+        $sektor_name = $sektor->nama_sektor;
+
+        Alert::success('Hapus Sektor Berhasil', 'Data '.$sektor_name.' sudah berhasil dihapus!');
+
+        $role->delete();
+        return redirect()->intended('/');
+    }
+
+
 }

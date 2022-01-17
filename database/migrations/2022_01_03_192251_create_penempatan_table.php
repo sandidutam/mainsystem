@@ -17,6 +17,8 @@ class CreatePenempatanTable extends Migration
             $table->id();
             $table->string('kode_lokasi');
             $table->string('nama_lokasi');
+            $table->string('kota');
+            $table->string('provinsi');
             $table->timestamps();
         });
     }

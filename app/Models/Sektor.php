@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sektor extends Model
 {
@@ -19,4 +20,13 @@ class Sektor extends Model
         return $this->hasMany(Pegawai::class);
     }
 
+    public function penempatan()
+    {
+        return $this->belongsTo(penempatan::class, 'penempatan_id');
+    }
+
+    public static function getId()
+    {
+        return $getId = DB::table('sektor')->orderBy('id','DESC')->take(1)->get();
+    }
 }

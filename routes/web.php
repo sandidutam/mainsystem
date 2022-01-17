@@ -69,6 +69,11 @@ Route::middleware(['auth', 'CheckRole:SuperAdmin'])->group(function () {
     Route::post('/pegawai/resetstatus', 'PegawaiController@resetStatus')->name('pegawai.reset_status');
     Route::post('/newrole', 'DashboardController@storeRole')->name('new.role');
     Route::delete('/role/{id}/destroy', 'DashboardController@destroyRole')->name('destroy.role');
+    Route::post('/newpenempatan', 'DashboardController@storePenempatan')->name('new.penempatan');
+    Route::delete('/penempatan/{id}/destroy', 'DashboardController@destroyPenempatan')->name('destroy.penempatan');
+    Route::post('/newsektor', 'DashboardController@storeSektor')->name('new.sektor');
+    Route::delete('/sektor/{id}/destroy', 'DashboardController@destroySektor')->name('destroy.sektor');
+
 });
 
 Route::middleware(['auth', 'CheckRole:SuperAdmin,Admin,Akuntan'])->group(function () {
